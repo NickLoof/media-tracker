@@ -2,49 +2,8 @@ import {Star, CircleX} from "lucide-react"
 import { useState, useEffect, useRef, Fragment} from "react";
 import "./MediaForm.css"
 
-const genreMap = {
-    28: "Action",
-    12: "Adventure",
-    16: "Animation",
-    35: "Comedy",
-    80: "Crime",
-    99: "Documentary",
-    18: "Drama",
-    10751: "Family",
-    14: "Fantasy",
-    36: "History",
-    27: "Horror",
-    10402: "Musical",
-    9648: "Mystery",
-    10749: "Romance",
-    878: "Sci-Fi",
-    53: "Thriller",
-    10752: "War",
-    37: "Western"
-};
-const genreOptions = [
-    "Action",
-    "Adventure",
-    "Animation",
-    "Comedy",
-    "Crime",
-    "Documentary",
-    "Drama",
-    "Family",
-    "Fantasy",
-    "History",
-    "Horror",
-    "Musical",
-    "Mystery",
-    "Romance",
-    "Sci-Fi",
-    "Sport",
-    "Superhero",
-    "Thriller",
-    "War",
-    "Western",
-    "Anime"
-];
+
+
 
 const MediaForm = (props) => {
     const [rating, setRating] = useState(0);
@@ -58,6 +17,21 @@ const MediaForm = (props) => {
     const [isSearching, setIsSearching] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const searchRef = useRef(null);
+    const [genreMap, setGenreMap] = useState({});
+    const genreOptions = Object.values(genreMap);
+
+    useEffect(() => {
+        fetch("http://localhost:3000/genres")
+        .then((response) => 
+            response.json())
+        .then((data) => {
+        const fetchedGenreMap = 
+    data.genres.reduce((result, genre) => {
+        result[genre.id] = genre.name;
+        return result;
+        },{});
+        setGenreMap(fetchedGenreMap);
+    })});
 
     const handleSelect = (item) => {
         console.log(item);
@@ -67,7 +41,7 @@ const MediaForm = (props) => {
         setIsSearching(false);
         setSelectedMedia(item);
 
-        const genres = item.genre_ids.map((id) => genreMap[id]);
+        const genres = item.genre_ids.map((id) => genreMap[id]).filter((genre) => genre !== undefined);
         setGenre(genres);
     }
 
@@ -161,10 +135,11 @@ const MediaForm = (props) => {
                         <option value="Tv Show">Tv Show</option>
                     </select>
                     <label htmlFor="genreCheckbox">Genre: </label>
-                    {genreOptions.map((genreOption) => <Fragment key={genreOption}>
+                    {selectedMedia?<p>{genre.join(", ")}</p>:
+                    (genreOptions.map((genreOption) => (<Fragment key={genreOption}>
                             <input value ={genreOption} type="checkbox" id="genreCheckbox" checked={genre.includes(genreOption)} onChange={() => handleGenreChange(genreOption)}/>
                             <label htmlFor="genreCheckbox">{genreOption}</label>
-                            </Fragment>)}
+                            </Fragment>)))}
                     <label htmlFor="statusSelect">Status: </label>
                     <select id="statusSelect" className="media-select" value={status} onChange={(event) => setStatus(event.target.value)}>
                         <option value="" disabled>Select</option>
@@ -180,7 +155,7 @@ const MediaForm = (props) => {
                         ))}
                         <p>Selected Rating: {rating}</p>
                     </div>
-                    <button type="submit">Add Movie</button>
+                    <button className="submit-button" type="submit">Add Movie</button>
                     <p>{errorMessage}</p>
                 </fieldset>
             </form>

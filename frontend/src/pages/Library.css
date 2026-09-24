@@ -66,6 +66,6 @@
 }
 .add-button:hover{
     scale: 1.1;
-    background-color: rgb(105, 5, 199);
+    background-color: #670296;
     box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
 }

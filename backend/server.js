@@ -32,6 +32,20 @@ app.get("/media", (req, res) => {
         res.send(rows);
     });
 });
+
+app.get("/genres", (req, res) => {
+    const url = `https://api.themoviedb.org/3/genre/movie/list`;
+    fetch(url, {
+        headers: {
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`
+        }
+    })
+    .then((response) => response.json()
+    ).then((data) => { 
+        res.send(data);
+    });
+})
+
 app.post("/media", (req, res) => {
     const {title, type, genre, status, rating, poster_path, description, release_date} = req.body;
     if (title === "" || type === "" || genre.length === 0 || status === "" || rating === 0){
