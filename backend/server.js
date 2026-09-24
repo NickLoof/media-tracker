@@ -9,6 +9,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
+
 db.run(`
     CREATE TABLE IF NOT EXISTS media(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +17,10 @@ db.run(`
     type TEXT,
     genre TEXT,
     status TEXT,
-    rating INTEGER
+    rating INTEGER,
+    poster_path TEXT,
+    description TEXT,
+    release_date
     );
 `);
 
@@ -29,17 +33,18 @@ app.get("/media", (req, res) => {
     });
 });
 app.post("/media", (req, res) => {
-    const {title, type, genre, status, rating} = req.body;
+    const {title, type, genre, status, rating, poster_path, description, release_date} = req.body;
     if (title === "" || type === "" || genre.length === 0 || status === "" || rating === 0){
         return res.status(400).send("Bad Request");
     }
     const genreText = genre.join(", ");
-    db.run("INSERT INTO media (title, type, genre, status, rating) VALUES(?, ?, ?, ?, ?)", [title, type, genreText, status, rating], function(error){
+    db.run("INSERT INTO media (title, type, genre, status, rating, poster_path, description, release_date) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", 
+        [title, type, genreText, status, rating, poster_path, description, release_date], function(error){
         if(error){
             return res.status(500).send("Error");
         }
 
-        res.status(201).send({id: this.lastID, ...req.body});
+        res.status(201).send({id: this.lastID, ...req.body, genre: genreText});
     });
 });
 app.delete("/media/:id", (req, res) => {
@@ -60,9 +65,10 @@ app.delete("/media/:id", (req, res) => {
 })
 app.patch("/media/:id", (req, res) => {
     const {id} = req.params;
-    const {title, type, genre, status, rating} = req.body;
-    db.run("UPDATE media SET title = ?, type = ?, genre = ?, status = ?, rating = ? WHERE id = ?", 
-        [title, type, genre, status, rating, id], function(error){
+    const {status, rating} = req.body;
+    if(status !== undefined){
+    db.run("UPDATE media SET status = ? WHERE id = ?", 
+        [status, id], function(error){
             if(error){
             return res.status(500).send("Error");
             }
@@ -72,7 +78,22 @@ app.patch("/media/:id", (req, res) => {
             if(this.changes !== 0){
             return res.status(204).send();
             }
+        })}else if(rating !== undefined) {
+            db.run("UPDATE media SET rating = ? WHERE id = ?", 
+        [rating, id], function(error){
+            if(error){
+            return res.status(500).send("Error");
+            }
+            if(this.changes === 0){
+            return res.status(404).send("Media not found");
+            }
+            if(this.changes !== 0){
+            return res.status(204).send();
+            }else{
+                return res.status(400).send("No valid update provided");
+            }
         })
+        }
 })
 app.get("/search", (req, res) => {
     const title = req.query.title;
