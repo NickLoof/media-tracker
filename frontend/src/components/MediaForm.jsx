@@ -3,9 +3,24 @@ import { useState, useEffect, useRef, Fragment} from "react";
 import "./MediaForm.css"
 
 const genreMap = {
+    28: "Action",
     12: "Adventure",
+    16: "Animation",
+    35: "Comedy",
+    80: "Crime",
+    99: "Documentary",
     18: "Drama",
-    878: "Sci-Fi"
+    10751: "Family",
+    14: "Fantasy",
+    36: "History",
+    27: "Horror",
+    10402: "Musical",
+    9648: "Mystery",
+    10749: "Romance",
+    878: "Sci-Fi",
+    53: "Thriller",
+    10752: "War",
+    37: "Western"
 };
 const genreOptions = [
     "Action",
@@ -73,7 +88,9 @@ const MediaForm = (props) => {
 
             return;
         }
-        fetch("http://localhost:3000/media", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({title, type, genre, status, rating})})
+        fetch("http://localhost:3000/media", {method: "POST", headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify({title, type, genre, status, rating, poster_path: selectedMedia?.poster_path || null, description: selectedMedia?.overview || "", 
+                release_date: selectedMedia?.release_date || selectedMedia?.first_air_date || ""})})
         .then((response) => {
             return response.json();
         })
