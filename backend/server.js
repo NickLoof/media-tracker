@@ -34,7 +34,9 @@ app.get("/media", (req, res) => {
 });
 
 app.get("/genres", (req, res) => {
-    const url = `https://api.themoviedb.org/3/genre/movie/list`;
+    const type = req.query.type;
+    const mediaType = (type === "Movie")?"movie":"tv"
+    const url = `https://api.themoviedb.org/3/genre/${mediaType}/list`;
     fetch(url, {
         headers: {
             Authorization: `Bearer ${process.env.TMDB_TOKEN}`
@@ -45,6 +47,41 @@ app.get("/genres", (req, res) => {
         res.send(data);
     });
 })
+app.get("/browse-movies", (req, res) => {
+    const page = req.query.page;
+    const type = req.query.type;
+    const category = req.query.category;
+    const genre = req.query.genre;
+    const mediaType = (type==="Movie")?"movie":"tv" 
+    const dateType = (type==="Movie")?"primary_release_date":"first_air_date";
+    const today = new Date();
+    const todayFormatted = today.toISOString().slice(0, 10);
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate()-90);
+    const ninetyDaysAgoFormatted = ninetyDaysAgo.toISOString().slice(0, 10);
+    let url=`https://api.themoviedb.org/3/discover/${mediaType}?page=${page}`;
+    if(category === "Popular"){ url += "&sort_by=popularity.desc"};
+    if(category === "Top Rated"){url += "&sort_by=vote_average.desc"
+        url += "&vote_count.gte=500";};
+    if(category === "New Releases"){
+        url += `&sort_by=${dateType}.desc`;
+        url += `&${dateType}.gte=${ninetyDaysAgoFormatted}`;
+        url += `&${dateType}.lte=${todayFormatted}`};
+    if(genre){
+        url += `&with_genres=${genre}`;
+    };
+    
+    console.log(url);
+    fetch(url, {
+        headers: {
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`
+        }
+    })
+    .then((response) => response.json()
+    ).then((data) => { 
+        res.send(data);
+    });
+});
 
 app.post("/media", (req, res) => {
     const {title, type, genre, status, rating, poster_path, description, release_date} = req.body;

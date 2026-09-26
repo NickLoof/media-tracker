@@ -7,6 +7,8 @@ const Library = () => {
     const starCount = [1, 2, 3, 4, 5];
     const [media, setMedia] = useState([]);
     const [showMedia, setShowMedia] = useState(false);
+    const [typeFilter, setTypeFilter] = useState("All");
+    const [statusFilter, setStatusFilter] = useState("All");
 
     const showMediaForm = () => {
         setShowMedia(true);
@@ -52,6 +54,11 @@ const Library = () => {
             method: "PATCH", headers:{"Content-Type": "application/json"}, body: JSON.stringify({rating: newRating})
         });
     };
+    
+    const filteredMedia = media.filter((item) => {
+        return (typeFilter === "All" || item.type === typeFilter) && (statusFilter === "All" || item.status === statusFilter);
+    })
+    
 
   useEffect(() => {
   fetch("http://localhost:3000/media")
@@ -67,8 +74,22 @@ const Library = () => {
         <div>
             <h1>My Library</h1>
             <button className="add-button" onClick={showMediaForm}>+ Add Media</button>
+            <div className="type-filter">
+                <button className={typeFilter === "All" ? "filter-button-active":"filter-button"} onClick={() => setTypeFilter("All")}>All</button> | 
+                <button className={typeFilter === "Movie" ? "filter-button-active":"filter-button"} onClick={() => setTypeFilter("Movie")}>Movies</button> | 
+                <button className={typeFilter === "Tv Show" ? "filter-button-active":"filter-button"} onClick={() => setTypeFilter("Tv Show")}>Tv Shows</button>
+            </div>
+            <div className="status-filter">
+                <button className={statusFilter === "All" ? "filter-button-active":"filter-button"} onClick={() => setStatusFilter("All")}>All</button> | 
+                <button className={statusFilter === "Want to Watch"?"filter-button-active":"filter-button"} onClick={() => setStatusFilter("Want to Watch")}>Want to Watch</button> | 
+                <button className={statusFilter === "Watching"?"filter-button-active":"filter-button"} onClick={() => setStatusFilter("Watching")}>Watching</button>
+                <button className={statusFilter === "Completed"?"filter-button-active":"filter-button"} onClick={() => setStatusFilter("Completed")}>Completed</button> | 
+                <button className={statusFilter === "On Hold"?"filter-button-active":"filter-button"} onClick={() => setStatusFilter("On Hold")}>On Hold</button> |
+                <button className={statusFilter === "Dropped"?"filter-button-active":"filter-button"} onClick={() => setStatusFilter("Dropped")}>Dropped</button>
+            </div>
             {showMedia && <MediaForm hideMediaForm={hideMediaForm} addMedia={addMedia}/>}
-            {media.map((item) => {
+            {filteredMedia.length === 0 && <p>"No media matches these filters.</p>}
+            {filteredMedia.map((item) => {
             return(
             <div className="movie-card" key={item.id}>    
             <div className="movie-card-body">

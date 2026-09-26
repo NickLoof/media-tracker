@@ -69,3 +69,27 @@
     background-color: #670296;
     box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
 }
+.filter-button{
+    border: solid rgb(0, 0, 0);
+    border-radius: 20px;
+    padding: 5px;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px 2px #101011;
+    background-color: #493c5e;
+    color: white;
+    transition: scale 0.3s;
+}
+.filter-button:hover{
+    scale: 1.1;
+    background-color: #670296;
+    box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
+}
+.filter-button-active{
+    border: solid rgb(0, 0, 0);
+    border-radius: 20px;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #670296;
+    color: white;
+    box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
+}
