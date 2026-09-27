@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import "./Browse.css";
+import {CircleX} from "lucide-react"
 
 const Browse = () =>{
     const [page, setPage] = useState(1);
@@ -10,23 +11,48 @@ const Browse = () =>{
     const pageNumbers = (page<3?[1, 2, 3, 4, 5]:[page -2, page-1, page, page + 1, page +2]).filter((number)=> number <= totalPages);
     const [genres, setGenres] = useState([]);
     const [genreFilter, setGenreFilter] = useState("");
+    const [movieClicked, setMovieClicked] = useState(null);
+    const [libraryMessage, setLibraryMessage] = useState("");
 
     useEffect(() => {
         fetch(`http://localhost:3000/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}`)
         .then((response) => response.json())
         .then((data) => {
             setMovies(data.results);
-            setTotalPages(data.total_pages)})
+            setTotalPages(data.total_pages);})
+        .catch((error) => {
+            console.log("Browse FETCH ERROR", error);
+        });
     }, [page, typeFilter, category, genreFilter]);
 
     useEffect(() => {
 
         fetch(`http://localhost:3000/genres?type=${typeFilter}`)
-        .then((response) => response.json())
+        .then((response)=> response.json())
         .then((data) => {
             setGenres(data.genres)});
     },[typeFilter])
 
+
+   const addToLibrary = () => {
+        const libraryFormat = {
+            title: movieClicked.title || movieClicked.name,
+            type: typeFilter,
+            genre: movieClicked.genre_ids.map((id) => genres.find((genre)=> genre.id===id).name),
+            status: "Want to Watch",
+            rating: 3,
+            poster_path: movieClicked.poster_path,
+            description: movieClicked.overview,
+            release_date: movieClicked.release_date || movieClicked.first_air_date,
+            tmdb_id: movieClicked.id
+        }
+        fetch("http://localhost:3000/media", {method: "POST", headers:{"Content-Type": "application/json"}, body: JSON.stringify(libraryFormat)})
+        .then((response) =>{ if(response.status === 409) {setLibraryMessage("Movie already added!"); 
+            return;
+        }if(response.status === 201) {setLibraryMessage("Added to your Library!")}
+        })
+        };
+   
     
 
     return (
@@ -48,9 +74,30 @@ const Browse = () =>{
                     {genres.map((genre) => (<option key={genre.id} value={genre.id}>{genre.name}</option>))}
                 </select>
             </div>
+            {movieClicked&&(
+                <div className="movie-overlay">
+                    <div className="movie-popup">
+                        <div className="movie-card-body">
+                        <div className="poster">
+                            <img src={`https://image.tmdb.org/t/p/w200${movieClicked.poster_path}`}></img>
+                        </div>
+                        <div className="movie-info">
+                            <button className="close-button" onClick={()=>{setMovieClicked(null); setLibraryMessage("")}}><CircleX/></button>
+                            <p>{movieClicked.title || movieClicked.name}</p>
+                            <p>{movieClicked.release_date || movieClicked.first_air_date}</p>
+                            <p>Type: {typeFilter}</p>
+                            <p>Genre: {movieClicked.genre_ids.map((id) => genres.find((genre)=> genre.id===id).name).join(", ")}</p>
+                            
+                        <details><summary>Description: </summary>{movieClicked.overview}</details>
+                        </div>
+                        </div>
+                        <button className="add-to-library-button" onClick={() => addToLibrary()}>Add to Library</button>
+                        {libraryMessage &&(<p>{libraryMessage}</p>)}
+                    </div>
+                </div>)}
             <div className="browse-grid">
             {movies.map((movie) => (
-                <div className="browse-movie-card" key={movie.id}>
+                <div className="browse-movie-card" key={movie.id} onClick={() => {setMovieClicked(movie)}}>
                     <img className="browse-poster" src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title || movie.name}/>
                     <div className="movie-title">
                         <p>{movie.title||movie.name}{" "}({movie.release_date?.slice(0,4)||movie.first_air_date?.slice(0,4)})</p>
@@ -63,6 +110,6 @@ const Browse = () =>{
             <button className="page-button" onClick={() => setPage(page<totalPages?page +1:page)}>Next</button>
         </div>
     );
-}
+};
 
 export default Browse;

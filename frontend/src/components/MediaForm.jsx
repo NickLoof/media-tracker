@@ -17,11 +17,12 @@ const MediaForm = (props) => {
     const [isSearching, setIsSearching] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const searchRef = useRef(null);
-    const [genreMap, setGenreMap] = useState({});
-    const genreOptions = Object.values(genreMap);
+    const [movieGenreMap, setMovieGenreMap] = useState({});
+    const [tvGenreMap, setTvGenreMap] = useState({});
+    const genreOptions = Object.values(type === "Movie"?movieGenreMap:tvGenreMap);
 
     useEffect(() => {
-        fetch("http://localhost:3000/genres")
+        fetch("http://localhost:3000/genres?type=Movie")
         .then((response) => 
             response.json())
         .then((data) => {
@@ -30,8 +31,20 @@ const MediaForm = (props) => {
         result[genre.id] = genre.name;
         return result;
         },{});
-        setGenreMap(fetchedGenreMap);
-    })});
+        setMovieGenreMap(fetchedGenreMap);
+    })
+        fetch(`http://localhost:3000/genres?type=${"Tv Show"}`)
+        .then((response) => 
+            response.json())
+        .then((data) => {
+        const fetchedGenreMap = 
+    data.genres.reduce((result, genre) => {
+        result[genre.id] = genre.name;
+        return result;
+        },{});
+        setTvGenreMap(fetchedGenreMap);
+    })
+    }, []);
 
     const handleSelect = (item) => {
         console.log(item);
@@ -40,8 +53,9 @@ const MediaForm = (props) => {
         setSearchResults([]);
         setIsSearching(false);
         setSelectedMedia(item);
+        const correctGenreMap = item.media_type === "movie"?movieGenreMap:tvGenreMap;
 
-        const genres = item.genre_ids.map((id) => genreMap[id]).filter((genre) => genre !== undefined);
+        const genres = item.genre_ids.map((id) => correctGenreMap[id]).filter((genre) => genre !== undefined);
         setGenre(genres);
     }
 
@@ -64,13 +78,15 @@ const MediaForm = (props) => {
         }
         fetch("http://localhost:3000/media", {method: "POST", headers: {"Content-Type": "application/json"}, 
             body: JSON.stringify({title, type, genre, status, rating, poster_path: selectedMedia?.poster_path || null, description: selectedMedia?.overview || "", 
-                release_date: selectedMedia?.release_date || selectedMedia?.first_air_date || ""})})
+                release_date: selectedMedia?.release_date || selectedMedia?.first_air_date || "", tmdb_id: selectedMedia?.id})})
         .then((response) => {
-            return response.json();
+            if(response.status === 409) {setErrorMessage("Movie already added!"); 
+            return;
+        }if(response.status === 201) {return response.json()}
         })
         .then((data) => {
-            props.addMedia(data);
-            props.hideMediaForm();
+            if(data){props.addMedia(data);
+            props.hideMediaForm();}
         });
         }
 

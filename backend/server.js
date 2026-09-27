@@ -20,9 +20,11 @@ db.run(`
     rating INTEGER,
     poster_path TEXT,
     description TEXT,
-    release_date
+    release_date TEXT,
+    tmdb_id INTEGER
     );
 `);
+
 
 app.get("/", (req, res) => {
     res.send("Hello!");
@@ -84,13 +86,27 @@ app.get("/browse-movies", (req, res) => {
 });
 
 app.post("/media", (req, res) => {
-    const {title, type, genre, status, rating, poster_path, description, release_date} = req.body;
+    const {title, type, genre, status, rating, poster_path, description, release_date, tmdb_id} = req.body;
     if (title === "" || type === "" || genre.length === 0 || status === "" || rating === 0){
         return res.status(400).send("Bad Request");
     }
-    const genreText = genre.join(", ");
-    db.run("INSERT INTO media (title, type, genre, status, rating, poster_path, description, release_date) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", 
-        [title, type, genreText, status, rating, poster_path, description, release_date], function(error){
+    db.get(
+        "SELECT * FROM media WHERE tmdb_id = ? AND type = ?",
+        [tmdb_id, type],
+        function(error, row) {
+            if (error) {
+        return res.status(500).send("Error");
+            }
+
+            if (row) {
+                return res.status(409).json({
+                    message: "Already in library"
+                });
+            }
+
+            const genreText = genre.join(", ");
+    db.run("INSERT INTO media (title, type, genre, status, rating, poster_path, description, release_date, tmdb_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        [title, type, genreText, status, rating, poster_path, description, release_date, tmdb_id], function(error){
         if(error){
             return res.status(500).send("Error");
         }
@@ -98,6 +114,13 @@ app.post("/media", (req, res) => {
         res.status(201).send({id: this.lastID, ...req.body, genre: genreText});
     });
 });
+        }
+    );
+
+
+    
+
+
 app.delete("/media/:id", (req, res) => {
     const{id} = req.params;
     console.log(id);
