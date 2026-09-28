@@ -66,7 +66,6 @@ const Library = () => {
     return response.json();
   })
   .then((data) => {
-    console.log(data)
     setMedia(data);
   });
   }, []);

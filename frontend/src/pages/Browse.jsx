@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import "./Browse.css";
-import {CircleX} from "lucide-react"
+import {CircleX, Star} from "lucide-react"
 
 const Browse = () =>{
     const [page, setPage] = useState(1);
@@ -13,17 +13,47 @@ const Browse = () =>{
     const [genreFilter, setGenreFilter] = useState("");
     const [movieClicked, setMovieClicked] = useState(null);
     const [libraryMessage, setLibraryMessage] = useState("");
+    const [movieDetails, setMovieDetails] = useState(null);
+    const hours = Math.floor((movieDetails?.runtime || 0) / 60);
+    const minutes = (movieDetails?.runtime || 0) % 60;
+    const [trailerVideo, setTrailerVideo] = useState(null);
+    const [inputValue, setInputValue] = useState("");
 
     useEffect(() => {
-        fetch(`http://localhost:3000/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}`)
+        if(!movieClicked){
+            return;
+        }
+        fetch(`http://localhost:3000/media-details/${movieClicked.id}?type=${typeFilter}`)
+        .then((response) => response.json())
+        .then((data) => {
+            setMovieDetails(data);
+        })
+        fetch(`http://localhost:3000/media-videos/${movieClicked.id}?type=${typeFilter}`)
+        .then((response) => response.json())
+        .then((data) => {
+        const trailer = data.results.find((video) => video.site === "YouTube" && video.type === "Trailer" && video.official === true)||
+                        data.results.find((video) => video.site === "YouTube" && video.type === "Trailer")||
+                        data.results.find((video) => video.site === "YouTube" && video.type === "Teaser" && video.official === true)||
+                        data.results.find((video) => video.site === "YouTube" && video.type === "Teaser");
+        setTrailerVideo(trailer)})
+    }, [movieClicked, typeFilter]);
+
+    useEffect(() => {
+        let url = inputValue
+        ? `/browse-movies?title=${encodeURIComponent(inputValue)}&type=${typeFilter}`
+        : `/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}`
+        const timer = setTimeout(() =>{
+        fetch(`http://localhost:3000${url}`)
         .then((response) => response.json())
         .then((data) => {
             setMovies(data.results);
             setTotalPages(data.total_pages);})
         .catch((error) => {
-            console.log("Browse FETCH ERROR", error);
-        });
-    }, [page, typeFilter, category, genreFilter]);
+            console.error("Browse FETCH ERROR", error);
+        });  
+    }, 200); 
+    return () => clearTimeout(timer);
+    }, [page, typeFilter, category, genreFilter, inputValue]);
 
     useEffect(() => {
 
@@ -59,6 +89,9 @@ const Browse = () =>{
         <div>
             <h1>Browse all media</h1>
             <div>
+                <input type="text" placeholder="Search movies and Tv shows..." value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
+            </div>
+            <div>
                 <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>Movies</button> |
                 <button className={typeFilter === "Tv Show" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Tv Show"); setGenreFilter(""); setPage(1);}}>Tv Shows </button> 
             </div>
@@ -77,20 +110,33 @@ const Browse = () =>{
             {movieClicked&&(
                 <div className="movie-overlay">
                     <div className="movie-popup">
+                        <div className="movie-backdrop" style={{backgroundImage: `url(https://image.tmdb.org/t/p/w780${movieDetails?.backdrop_path})`}}>
+                        <button className="close-button" onClick={()=>{setMovieClicked(null); setLibraryMessage("")}}><CircleX/></button>
+                        </div>
                         <div className="movie-card-body">
                         <div className="poster">
                             <img src={`https://image.tmdb.org/t/p/w200${movieClicked.poster_path}`}></img>
                         </div>
                         <div className="movie-info">
-                            <button className="close-button" onClick={()=>{setMovieClicked(null); setLibraryMessage("")}}><CircleX/></button>
+                            
                             <p>{movieClicked.title || movieClicked.name}</p>
-                            <p>{movieClicked.release_date || movieClicked.first_air_date}</p>
+                            <p>{movieClicked.release_date?.slice(0, 4) || movieClicked.first_air_date?.slice(0,4)}{" • "}
+                                {typeFilter === "Movie"?<>{hours}<abbr title="hours">h</abbr>
+                                                          {minutes}<abbr title="minutes">m</abbr>
+                                                        </>
+                                                        : <>
+                                                        {movieDetails?.number_of_seasons}{" "}
+                                                        {movieDetails?.number_of_seasons === 1 ? "Season" : "Seasons"}
+                                                        </>}
+                                </p>
+                            {movieDetails?.tagline&& <p className="tagline">{movieDetails.tagline}</p>}
                             <p>Type: {typeFilter}</p>
                             <p>Genre: {movieClicked.genre_ids.map((id) => genres.find((genre)=> genre.id===id).name).join(", ")}</p>
-                            
+                            <p><Star className="star" fill="currentColor"/>{movieDetails?.vote_average.toFixed(1)} / 10</p>
+                        </div>
+                        </div>
+                        {trailerVideo &&(<iframe className="trailer" src={`https://youtube.com/embed/${trailerVideo.key}`}></iframe>)}
                         <details><summary>Description: </summary>{movieClicked.overview}</details>
-                        </div>
-                        </div>
                         <button className="add-to-library-button" onClick={() => addToLibrary()}>Add to Library</button>
                         {libraryMessage &&(<p>{libraryMessage}</p>)}
                     </div>

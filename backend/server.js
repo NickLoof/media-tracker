@@ -25,6 +25,34 @@ db.run(`
     );
 `);
 
+app.get("/media-details/:id", (req, res) => {
+    const id = req.params.id;
+    const type= req.query.type
+    const mediaType = (type === "Movie") ? "movie" : "tv";
+    const url = (`https://api.themoviedb.org/3/${mediaType}/${id}`);
+    fetch(url, {
+        headers: {Authorization: `Bearer ${process.env.TMDB_TOKEN}`
+    } 
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        res.send(data);
+    })
+})
+
+app.get("/media-videos/:id", (req, res) => {
+    const id = req.params.id;
+    const type = req.query.type;
+    const mediaType = (type === "Movie")? "movie" : "tv";
+    const url = (`https://api.themoviedb.org/3/${mediaType}/${id}/videos`);
+    fetch(url, {
+        headers: {Authorization: `Bearer ${process.env.TMDB_TOKEN}`}
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        res.send(data);
+    })
+})
 
 app.get("/", (req, res) => {
     res.send("Hello!");
@@ -54,6 +82,7 @@ app.get("/browse-movies", (req, res) => {
     const type = req.query.type;
     const category = req.query.category;
     const genre = req.query.genre;
+    const title = req.query.title;
     const mediaType = (type==="Movie")?"movie":"tv" 
     const dateType = (type==="Movie")?"primary_release_date":"first_air_date";
     const today = new Date();
@@ -61,19 +90,22 @@ app.get("/browse-movies", (req, res) => {
     const ninetyDaysAgo = new Date();
     ninetyDaysAgo.setDate(ninetyDaysAgo.getDate()-90);
     const ninetyDaysAgoFormatted = ninetyDaysAgo.toISOString().slice(0, 10);
-    let url=`https://api.themoviedb.org/3/discover/${mediaType}?page=${page}`;
-    if(category === "Popular"){ url += "&sort_by=popularity.desc"};
-    if(category === "Top Rated"){url += "&sort_by=vote_average.desc"
-        url += "&vote_count.gte=500";};
-    if(category === "New Releases"){
-        url += `&sort_by=${dateType}.desc`;
-        url += `&${dateType}.gte=${ninetyDaysAgoFormatted}`;
-        url += `&${dateType}.lte=${todayFormatted}`};
-    if(genre){
-        url += `&with_genres=${genre}`;
-    };
+    let url= title
+            ? `https://api.themoviedb.org/3/search/${mediaType}?query=${encodeURIComponent(title)}`
+            :`https://api.themoviedb.org/3/discover/${mediaType}?page=${page}`;
+    if(!title){
+        if(category === "Popular"){ url += "&sort_by=popularity.desc"};
+        if(category === "Top Rated"){url += "&sort_by=vote_average.desc"
+            url += "&vote_count.gte=500";};
+        if(category === "New Releases"){
+            url += `&sort_by=${dateType}.desc`;
+            url += `&${dateType}.gte=${ninetyDaysAgoFormatted}`;
+            url += `&${dateType}.lte=${todayFormatted}`};
+         if(genre){
+            url += `&with_genres=${genre}`;
+        };
+    }
     
-    console.log(url);
     fetch(url, {
         headers: {
             Authorization: `Bearer ${process.env.TMDB_TOKEN}`
@@ -123,9 +155,7 @@ app.post("/media", (req, res) => {
 
 app.delete("/media/:id", (req, res) => {
     const{id} = req.params;
-    console.log(id);
     db.run("DELETE FROM media WHERE id = ?", [id], function(error) {
-        console.log("Changes:", this.changes);
         if(error){
             return res.status(500).send("Error");
         }

@@ -47,7 +47,6 @@ const MediaForm = (props) => {
     }, []);
 
     const handleSelect = (item) => {
-        console.log(item);
         setTitle(item.title || item.name);
         setType(item.media_type === "movie" ? "Movie":"Tv Show");
         setSearchResults([]);
