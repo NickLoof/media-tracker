@@ -1,6 +1,9 @@
 import {Star, CircleX} from "lucide-react"
 import { useState, useEffect, useRef, Fragment} from "react";
 import "./MediaForm.css"
+import { useContext } from "react";
+import { LanguageContext } from "../context/languageContext";
+import { translations } from "../../translations/translations";
 
 
 
@@ -20,6 +23,8 @@ const MediaForm = (props) => {
     const [movieGenreMap, setMovieGenreMap] = useState({});
     const [tvGenreMap, setTvGenreMap] = useState({});
     const genreOptions = Object.values(type === "Movie"?movieGenreMap:tvGenreMap);
+    const {language, setLanguage} = useContext(LanguageContext);
+    const t = translations[language];
 
     useEffect(() => {
         fetch("http://localhost:3000/genres?type=Movie")
@@ -68,7 +73,7 @@ const MediaForm = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if(title ==="" || type === "" || genre.length === 0 || status === "" || rating === 0){
-            setErrorMessage("Please fill out all fields!");
+            setErrorMessage(t.fillAllFields);
             setTimeout(() => {
                 setErrorMessage("");
             }, 3000);
@@ -128,49 +133,49 @@ const MediaForm = (props) => {
             <form onSubmit={handleSubmit}>
                 <fieldset className="media-form">
                     <button type="button" className="close-button" onClick={props.hideMediaForm}><CircleX /></button>
-                    <legend>Add Media</legend>
+                    <legend>{t.addMedia}</legend>
                         <div className="search-header">
-                        <label htmlFor="title">Title: </label>
+                        <label htmlFor="title">{t.title}: </label>
                         <div className="search-container" ref={searchRef}>
-                        <input id="Title" placeholder="Enter Title" value={title} onChange={(event) => {setTitle(event.target.value); setSelectedMedia(null); setIsSearching(true);}}
+                        <input id="Title" placeholder={t.enterTitle} value={title} onChange={(event) => {setTitle(event.target.value); setSelectedMedia(null); setIsSearching(true);}}
                         onFocus={() => setIsSearching(true)}/>
                         {isSearching && searchResults.length > 0 && (<div className="search-dropdown">
                         {searchResults.map((item) => (<div key={item.id} className="search-result" onClick={() => handleSelect(item)} >
                             {item.poster_path?(<img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
-                            alt={item.title || item.name}/>):(<div className="no-poster">No Image</div>)}
+                            alt={item.title || item.name}/>):(<div className="no-poster">{t.noImage}</div>)}
                             <p>{item.title || item.name}{item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)}</p></div>))}
                         </div>)}
                         </div>
-                        <p>Results found: {searchResults.length}</p>
+                        <p>{t.resultsFound}: {searchResults.length}</p>
                     </div>
-                    <label htmlFor="typeSelect">Type: </label>
+                    <label htmlFor="typeSelect">{t.type}: </label>
                     <select id="typeSelect" className="media-select" value={type} onChange={(event) => setType(event.target.value)}>
-                        <option value="" disabled>Select</option>
-                        <option value="Movie">Movie</option>
-                        <option value="Tv Show">Tv Show</option>
+                        <option value="" disabled>{t.select}</option>
+                        <option value="Movie">{t.movie}</option>
+                        <option value="Tv Show">{t.tvShow}</option>
                     </select>
-                    <label htmlFor="genreCheckbox">Genre: </label>
+                    <label htmlFor="genreCheckbox">{t.genre}: </label>
                     {selectedMedia?<p>{genre.join(", ")}</p>:
                     (genreOptions.map((genreOption) => (<Fragment key={genreOption}>
                             <input value ={genreOption} type="checkbox" id="genreCheckbox" checked={genre.includes(genreOption)} onChange={() => handleGenreChange(genreOption)}/>
                             <label htmlFor="genreCheckbox">{genreOption}</label>
                             </Fragment>)))}
-                    <label htmlFor="statusSelect">Status: </label>
+                    <label htmlFor="statusSelect">{t.status}: </label>
                     <select id="statusSelect" className="media-select" value={status} onChange={(event) => setStatus(event.target.value)}>
-                        <option value="" disabled>Select</option>
-                        <option value=" Want to Watch">Want to Watch</option>
-                        <option value="Watching">Watching</option>
-                        <option value="Completed">Completed</option>
-                        <option value="On Hold">On Hold</option>
-                        <option value="Dropped">Dropped</option>
+                        <option value="" disabled>{t.select}</option>
+                        <option value=" Want to Watch">{t.wantToWatch}</option>
+                        <option value="Watching">{t.watching}</option>
+                        <option value="Completed">{t.completed}</option>
+                        <option value="On Hold">{t.onHold}</option>
+                        <option value="Dropped">{t.dropped}</option>
                     </select>
-                    <div id="ratingSelect" className="star-rating">Rating: 
+                    <div id="ratingSelect" className="star-rating">{t.rating}: 
                         {starCount.map((star) => (
                             <Star key={star} onClick={() => setRating(star)} fill={rating >= star ? "currentColor" : "none"} /> 
                         ))}
-                        <p>Selected Rating: {rating}</p>
+                        <p>{t.selectedRating}: {rating}</p>
                     </div>
-                    <button className="submit-button" type="submit">Add Movie</button>
+                    <button className="submit-button" type="submit">{t.addMedia}</button>
                     <p>{errorMessage}</p>
                 </fieldset>
             </form>

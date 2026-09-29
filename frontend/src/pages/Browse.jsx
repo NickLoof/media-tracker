@@ -1,6 +1,9 @@
 import {useState, useEffect} from "react";
 import "./Browse.css";
 import {CircleX, Star} from "lucide-react"
+import { useContext } from "react";
+import { LanguageContext } from "../context/languageContext";
+import { translations } from "../../translations/translations";
 
 const Browse = () =>{
     const [page, setPage] = useState(1);
@@ -18,12 +21,14 @@ const Browse = () =>{
     const minutes = (movieDetails?.runtime || 0) % 60;
     const [trailerVideo, setTrailerVideo] = useState(null);
     const [inputValue, setInputValue] = useState("");
+    const {language, setLanguage} = useContext(LanguageContext);
+    const t = translations[language];
 
     useEffect(() => {
         if(!movieClicked){
             return;
         }
-        fetch(`http://localhost:3000/media-details/${movieClicked.id}?type=${typeFilter}`)
+        fetch(`http://localhost:3000/media-details/${movieClicked.id}?type=${typeFilter}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
             setMovieDetails(data);
@@ -31,17 +36,25 @@ const Browse = () =>{
         fetch(`http://localhost:3000/media-videos/${movieClicked.id}?type=${typeFilter}`)
         .then((response) => response.json())
         .then((data) => {
-        const trailer = data.results.find((video) => video.site === "YouTube" && video.type === "Trailer" && video.official === true)||
-                        data.results.find((video) => video.site === "YouTube" && video.type === "Trailer")||
-                        data.results.find((video) => video.site === "YouTube" && video.type === "Teaser" && video.official === true)||
-                        data.results.find((video) => video.site === "YouTube" && video.type === "Teaser");
+        const germanVideos = data.results.filter((video) => video.iso_639_1 === "de");
+        const englishVideos = data.results.filter((video) => video.iso_639_1 === "en");
+        const germanTrailer = germanVideos.find((video) => video.site === "YouTube" && video.type === "Trailer" && video.official === true)||
+                              germanVideos.find((video) => video.site === "YouTube" && video.type === "Trailer")||
+                              germanVideos.find((video) => video.site === "YouTube" && video.type === "Teaser" && video.official === true)||
+                              germanVideos.find((video) => video.site === "YouTube" && video.type === "Teaser");
+        const englishTrailer = englishVideos.find((video) => video.site === "YouTube" && video.type === "Trailer" && video.official === true)||
+                               englishVideos.find((video) => video.site === "YouTube" && video.type === "Trailer")||
+                               englishVideos.find((video) => video.site === "YouTube" && video.type === "Teaser" && video.official === true)||
+                               englishVideos.find((video) => video.site === "YouTube" && video.type === "Teaser");
+        const trailer = language === "de"? germanTrailer || englishTrailer:englishTrailer;
+                         
         setTrailerVideo(trailer)})
-    }, [movieClicked, typeFilter]);
+    }, [movieClicked, typeFilter, language]);
 
     useEffect(() => {
         let url = inputValue
-        ? `/browse-movies?title=${encodeURIComponent(inputValue)}&type=${typeFilter}`
-        : `/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}`
+        ? `/browse-movies?title=${encodeURIComponent(inputValue)}&type=${typeFilter}&language=${language}`
+        : `/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}&language=${language}`
         const timer = setTimeout(() =>{
         fetch(`http://localhost:3000${url}`)
         .then((response) => response.json())
@@ -53,7 +66,7 @@ const Browse = () =>{
         });  
     }, 200); 
     return () => clearTimeout(timer);
-    }, [page, typeFilter, category, genreFilter, inputValue]);
+    }, [page, typeFilter, category, genreFilter, inputValue, language]);
 
     useEffect(() => {
 
@@ -77,9 +90,9 @@ const Browse = () =>{
             tmdb_id: movieClicked.id
         }
         fetch("http://localhost:3000/media", {method: "POST", headers:{"Content-Type": "application/json"}, body: JSON.stringify(libraryFormat)})
-        .then((response) =>{ if(response.status === 409) {setLibraryMessage("Movie already added!"); 
+        .then((response) =>{ if(response.status === 409) {setLibraryMessage(t.alreadyInLibrary); 
             return;
-        }if(response.status === 201) {setLibraryMessage("Added to your Library!")}
+        }if(response.status === 201) {setLibraryMessage(t.addedToLibrary)}
         })
         };
    
@@ -87,23 +100,23 @@ const Browse = () =>{
 
     return (
         <div>
-            <h1>Browse all media</h1>
+            <h1>{t.browseAllMedia}</h1>
             <div>
-                <input type="text" placeholder="Search movies and Tv shows..." value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
+                <input type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
             </div>
             <div>
-                <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>Movies</button> |
-                <button className={typeFilter === "Tv Show" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Tv Show"); setGenreFilter(""); setPage(1);}}>Tv Shows </button> 
+                <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>{t.movies}</button> |
+                <button className={typeFilter === "Tv Show" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Tv Show"); setGenreFilter(""); setPage(1);}}>{t.tvShows} </button> 
             </div>
             <div>
-                <button className={category === "Popular" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Popular"); setPage(1);}}>Popular</button> |
-                <button className={category === "New Releases" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("New Releases"); setPage(1);}}>New Releases</button> |
-                <button className={category === "Top Rated" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Top Rated"); setPage(1);}}>Top Rated</button>
+                <button className={category === "Popular" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Popular"); setPage(1);}}>{t.popular}</button> |
+                <button className={category === "New Releases" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("New Releases"); setPage(1);}}>{t.newReleases}</button> |
+                <button className={category === "Top Rated" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Top Rated"); setPage(1);}}>{t.topRated}</button>
             </div>
             <div>
-                <label htmlFor="genreSelect">Genre: </label>
+                <label htmlFor="genreSelect">{t.genre}: </label>
                 <select id="genreSelect" value={genreFilter} onChange={(event) => {setGenreFilter(event.target.value); setPage(1)}}>
-                    <option value={""}>All Genres</option>
+                    <option value={""}>{t.allGenres}</option>
                     {genres.map((genre) => (<option key={genre.id} value={genre.id}>{genre.name}</option>))}
                 </select>
             </div>
@@ -121,23 +134,23 @@ const Browse = () =>{
                             
                             <p>{movieClicked.title || movieClicked.name}</p>
                             <p>{movieClicked.release_date?.slice(0, 4) || movieClicked.first_air_date?.slice(0,4)}{" • "}
-                                {typeFilter === "Movie"?<>{hours}<abbr title="hours">h</abbr>
-                                                          {minutes}<abbr title="minutes">m</abbr>
+                                {typeFilter === "Movie"?<>{hours}<abbr title={t.hours}>h</abbr>
+                                                          {minutes}<abbr title={t.minutes}>m</abbr>
                                                         </>
                                                         : <>
                                                         {movieDetails?.number_of_seasons}{" "}
-                                                        {movieDetails?.number_of_seasons === 1 ? "Season" : "Seasons"}
+                                                        {movieDetails?.number_of_seasons === 1 ? t.season : t.seasons}
                                                         </>}
                                 </p>
                             {movieDetails?.tagline&& <p className="tagline">{movieDetails.tagline}</p>}
-                            <p>Type: {typeFilter}</p>
-                            <p>Genre: {movieClicked.genre_ids.map((id) => genres.find((genre)=> genre.id===id).name).join(", ")}</p>
+                            <p>{t.type}: {typeFilter === "Movie" ? t.movie : t.tvShow}</p>
+                            <p>{t.genre}: {movieClicked.genre_ids.map((id) => genres.find((genre)=> genre.id===id).name).join(", ")}</p>
                             <p><Star className="star" fill="currentColor"/>{movieDetails?.vote_average.toFixed(1)} / 10</p>
                         </div>
                         </div>
                         {trailerVideo &&(<iframe className="trailer" src={`https://youtube.com/embed/${trailerVideo.key}`}></iframe>)}
-                        <details><summary>Description: </summary>{movieClicked.overview}</details>
-                        <button className="add-to-library-button" onClick={() => addToLibrary()}>Add to Library</button>
+                        <details><summary>{t.description}: </summary>{movieClicked.overview}</details>
+                        <button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>
                         {libraryMessage &&(<p>{libraryMessage}</p>)}
                     </div>
                 </div>)}
@@ -150,10 +163,10 @@ const Browse = () =>{
                     </div>
                 </div>))}
             </div>
-            <p>Current Page: {page}</p>
-            <button className="page-button" onClick={() => setPage(page>=2?(page - 1):(page))}>Previous</button>
+            <p>{t.currentPage}: {page}</p>
+            <button className="page-button" onClick={() => setPage(page>=2?(page - 1):(page))}>{t.previous}</button>
             {pageNumbers.map((number) => <button className={number === page ? "page-button-active":"page-button"} key={number} onClick={() => setPage(number)}>{number}</button>)}
-            <button className="page-button" onClick={() => setPage(page<totalPages?page +1:page)}>Next</button>
+            <button className="page-button" onClick={() => setPage(page<totalPages?page +1:page)}>{t.next}</button>
         </div>
     );
 };

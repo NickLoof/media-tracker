@@ -27,9 +27,11 @@ db.run(`
 
 app.get("/media-details/:id", (req, res) => {
     const id = req.params.id;
-    const type= req.query.type
+    const type= req.query.type;
+    const language = req.query.language;
+    const tmdbLanguage = language === "de"? "de-DE":"en-US";
     const mediaType = (type === "Movie") ? "movie" : "tv";
-    const url = (`https://api.themoviedb.org/3/${mediaType}/${id}`);
+    const url = (`https://api.themoviedb.org/3/${mediaType}/${id}?language=${tmdbLanguage}`);
     fetch(url, {
         headers: {Authorization: `Bearer ${process.env.TMDB_TOKEN}`
     } 
@@ -83,6 +85,8 @@ app.get("/browse-movies", (req, res) => {
     const category = req.query.category;
     const genre = req.query.genre;
     const title = req.query.title;
+    const language = req.query.language;
+    const tmdbLanguage = language === "de"? "de-DE":"en-US";
     const mediaType = (type==="Movie")?"movie":"tv" 
     const dateType = (type==="Movie")?"primary_release_date":"first_air_date";
     const today = new Date();
@@ -93,6 +97,7 @@ app.get("/browse-movies", (req, res) => {
     let url= title
             ? `https://api.themoviedb.org/3/search/${mediaType}?query=${encodeURIComponent(title)}`
             :`https://api.themoviedb.org/3/discover/${mediaType}?page=${page}`;
+            url += `&language=${tmdbLanguage}`;
     if(!title){
         if(category === "Popular"){ url += "&sort_by=popularity.desc"};
         if(category === "Top Rated"){url += "&sort_by=vote_average.desc"
@@ -119,7 +124,7 @@ app.get("/browse-movies", (req, res) => {
 
 app.post("/media", (req, res) => {
     const {title, type, genre, status, rating, poster_path, description, release_date, tmdb_id} = req.body;
-    if (title === "" || type === "" || genre.length === 0 || status === "" || rating === 0){
+    if (title === "" || type === "" || status === "" || rating === 0){
         return res.status(400).send("Bad Request");
     }
     db.get(
