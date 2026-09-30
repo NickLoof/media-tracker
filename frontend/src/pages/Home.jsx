@@ -7,9 +7,20 @@ const Home = () => {
     const t = translations[language];
 
     return (
-        <div>
-            <p>{t.home}</p>
-        </div>
+        <>
+            <div>
+                <p>{t.home}</p>
+            </div>
+            <div>
+                <p>{t.recentlyAdded}</p>
+            </div>
+            <div>
+                <p>{t.currentlyWatching}</p>
+            </div>
+            <div>
+                <p>{t.yourLibrary}</p>
+            </div>
+        </>
     );
 };
 
