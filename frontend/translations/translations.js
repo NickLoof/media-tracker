@@ -61,7 +61,19 @@ export const translations = {
         currentPage: "Current Page",
         english: "English",
         german: "German",
-        appTitle: "Media-Tracker"
+        appTitle: "Media-Tracker",
+
+        //Home
+        homeTitle: "Home",
+        welcomeBack: "Welcome back!",
+        whatToWatch: "What would you like to watch?",
+        searchMedia: "Search movies and TV shows...",
+        continueWatching: "Continue Watching",
+        recentlyAdded: "Recently Added",
+        yourLibrary: "Your Library",
+        viewLibrary: "View Library",
+        browseMedia: "Browse Media",
+        menu: "MENU",
     },
 
     de: {
@@ -129,5 +141,17 @@ export const translations = {
         appTitle: "Medien-Tracker",
         hours: "Stunden",
         minutes: "Minuten",
+
+        //Home
+        homeTitle: "Startseite",
+        welcomeBack: "Willkommen zurück!",
+        whatToWatch: "Was möchtest du anschauen?",
+        searchMedia: "Filme und Serien suchen...",
+        continueWatching: "Weiterschauen",
+        recentlyAdded: "Kürzlich hinzugefügt",
+        yourLibrary: "Deine Bibliothek",
+        viewLibrary: "Bibliothek ansehen",
+        browseMedia: "Medien durchsuchen",
+        menu: "MENÜ",
     }
 };

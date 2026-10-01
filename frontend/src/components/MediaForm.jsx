@@ -110,7 +110,7 @@ const MediaForm = (props) => {
             .then((data) => {
                 setSearchResults(data);
             })
-        }, 500);
+        }, 200);
         return() => {
             clearTimeout(timer);
         };

@@ -14,12 +14,11 @@ button{
     align-self: flex-start;
 }
 .page-content{
-    border: 1px solid rgb(122, 122, 122);
-    border-radius: 15px;
+    border-left: 1px solid rgb(122, 122, 122);
     width: stretch;
-    padding: 20px;
     position: relative;
     top: 60px;
+    min-height: 100vh;
 }
 .language-picker{
     position: absolute;

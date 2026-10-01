@@ -25,7 +25,7 @@ function App() {
           <h1 className="app-title">{t.appTitle}</h1>
         </div>
         <div className="menu-container">
-          <p className="menu-title">Menu</p>
+          <p className="menu-title">{t.menu}</p>
           <NavLink to="/" end className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><House/> {t.home} </NavLink>
           <NavLink to="/library" className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><LibraryBig/> {t.library} </NavLink>
           <NavLink to="/browse" className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><Globe/> {t.browseMedia}</NavLink>
