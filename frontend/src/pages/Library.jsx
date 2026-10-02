@@ -5,6 +5,7 @@ import {Star} from "lucide-react"
 import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
+import MediaDetails from "../components/MediaDetails";
 
 const Library = () => {
     const starCount = [1, 2, 3, 4, 5];
@@ -14,6 +15,7 @@ const Library = () => {
     const [statusFilter, setStatusFilter] = useState("All");
     const {language, setLanguage} = useContext(LanguageContext);
     const t = translations[language];
+    const [selectedMedia, setSelectedMedia] = useState(null);
 
     const showMediaForm = () => {
         setShowMedia(true);
@@ -75,7 +77,7 @@ const Library = () => {
   });
   }, []);
     return (
-        <div>
+        <div className="library-layout">
             <h1>{t.myLibrary}</h1>
             <button className="add-button" onClick={showMediaForm}>+ {t.addMedia}</button>
             <div className="type-filter">
@@ -93,39 +95,46 @@ const Library = () => {
             </div>
             {showMedia && <MediaForm hideMediaForm={hideMediaForm} addMedia={addMedia}/>}
             {filteredMedia.length === 0 && <p>{t.noMediaMatches}</p>}
+            {selectedMedia && <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.type} onClose={() => setSelectedMedia(null)}/>}
+            <div className="library-grid">
             {filteredMedia.map((item) => {
             return(
             <div className="movie-card" key={item.id}>    
             <div className="movie-card-body">
-                <img className="library-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
+                <img onClick={() => setSelectedMedia(item)} className="library-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
                 <div className="movie-card-info">
-                    <h2>{item.title}</h2>
-                    <p>{item.release_date}</p>
-                    <p>{t.type}: {item.type}</p>
-                    <p>{t.genre}: {item.genre}</p>
-                    <label htmlFor="typeSelect">{t.status}:</label>
-                    <select id="statusSelect" value={item.status} onChange={(event) => updateStatus(item.id, event.target.value)}>
+                    <h2>{item.title}{" "}({item.release_date?.slice(0, 4)})</h2>
+                    <p><select className="status-select" value={item.status} onChange={(event) => updateStatus(item.id, event.target.value)}>
                         <option value="Want to Watch">{t.wantToWatch}</option>
                         <option value="Watching">{t.watching}</option>
                         <option value="Completed">{t.completed}</option>
                         <option value="On Hold">{t.onHold}</option>
                         <option value="Dropped">{t.dropped}</option>
-                    </select>
-                    <div className="star-rating"> 
+                    </select></p>
+                    <div className="library-rating">
+                        <div className="star-rating"> 
                         {starCount.map((star) => (
                             <Star key={star} onClick={() => updateRating(item.id, star)} fill={item.rating >= star ? "currentColor" : "none"} /> 
                         ))}
-                        <p>{t.selectedRating}: {item.rating}</p>
                     </div>
-                    <button className="remove-button" onClick={() => deleteMedia(item.id)}>{t.remove}</button>
+                    </div>
                 </div>
             </div>
-            <details className="details"><summary>{t.description}:</summary> {item.description}</details>
             </div>
             )
             })}
+            </div>
         </div>
     );
 };
+                    {/*<p>{t.type}: {item.type}</p>
+                    <p>{t.genre}: {item.genre}</p>
+                    <label htmlFor="typeSelect">{t.status}:</label>
+                    
+                    
+                    <button className="remove-button" onClick={() => deleteMedia(item.id)}>{t.remove}</button>*/}
+                
+            {/*<details className="details"><summary>{t.description}:</summary> {item.description}</details>*/}
+            
 
 export default Library;

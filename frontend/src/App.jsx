@@ -14,10 +14,6 @@ function App() {
 
   return(
     <>
-      <div className="language-picker">
-      <button className="language-button" onClick={() => setLanguage("en")}>{t.english}</button>
-      <button className="language-button" onClick={() => setLanguage("de")}>{t.german}</button>
-      </div>
       <div className="page-layout">
       <div className="side-menu">
         <div className="title-container">
@@ -30,7 +26,12 @@ function App() {
           <NavLink to="/library" className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><LibraryBig/> {t.library} </NavLink>
           <NavLink to="/browse" className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><Globe/> {t.browseMedia}</NavLink>
         </div>
+        <div className="language-picker">
+          <button className="language-button" onClick={() => setLanguage("en")}>{t.english}</button>
+          <button className="language-button" onClick={() => setLanguage("de")}>{t.german}</button>
+        </div>
       </div>
+      
       <main className="page-content">
         <Routes>
             <Route path="/" element={<Home />} />

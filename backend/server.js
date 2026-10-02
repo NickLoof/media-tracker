@@ -25,6 +25,7 @@ db.run(`
     );
 `);
 
+
 app.get("/media-details/:id", (req, res) => {
     const id = req.params.id;
     const type= req.query.type;

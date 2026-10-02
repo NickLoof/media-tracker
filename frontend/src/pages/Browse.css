@@ -1,3 +1,6 @@
+.browse-layout{
+    padding-left: 20px;
+}
 .filter-button{
     border: solid rgb(0, 0, 0);
     border-radius: 20px;
@@ -32,11 +35,15 @@
 }
 .browse-poster{
     border: solid 1px rgb(128, 128, 128);
+    border-radius: 5px;
     width: 100%;
     aspect-ratio: 2/3;
     object-fit: cover;
     box-shadow: 2px 2px 2px 2px rgb(10, 10, 10);
     
+}
+.browse-movie-card{
+    transition: 0.3s;
 }
 .browse-movie-card:hover{
     scale:1.15;
@@ -128,7 +135,7 @@
     box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
 }
 .star{
-    color: gold;
+    color: goldenrod;
 }
 .movie-backdrop {
     height: 160px;

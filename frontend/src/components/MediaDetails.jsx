@@ -13,17 +13,19 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
     const hours = Math.floor((movieDetails?.runtime || 0) / 60);
     const minutes = (movieDetails?.runtime || 0) % 60;
     const [libraryMessage, setLibraryMessage] = useState("");
+    const tmdbId = selectedMedia.tmdb_id || selectedMedia.id;
+    const isInLibrary = selectedMedia.tmdb_id != null;
 
     useEffect(() => {
         if(!selectedMedia){
             return;
         }
-        fetch(`http://localhost:3000/media-details/${selectedMedia.id}?type=${type}&language=${language}`)
+        fetch(`http://localhost:3000/media-details/${tmdbId}?type=${type}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
             setMovieDetails(data);
         })
-        fetch(`http://localhost:3000/media-videos/${selectedMedia.id}?type=${type}`)
+        fetch(`http://localhost:3000/media-videos/${tmdbId}?type=${type}`)
         .then((response) => response.json())
         .then((data) => {
         const germanVideos = data.results.filter((video) => video.iso_639_1 === "de");
@@ -39,7 +41,7 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
         const trailer = language === "de"? germanTrailer || englishTrailer:englishTrailer;
                          
         setTrailerVideo(trailer)})
-    }, [selectedMedia, type, language]);
+    }, [selectedMedia, type, language, tmdbId]);
 
      const addToLibrary = () => {
         const libraryFormat = {
@@ -67,7 +69,7 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
                         <div className="movie-backdrop" style={{backgroundImage: `url(https://image.tmdb.org/t/p/w780${movieDetails?.backdrop_path})`}}>
                         <button className="close-button" onClick={onClose}><CircleX/></button>
                         </div>
-                        <div className="movie-card-body">
+                        <div className="media-details-body">
                         <div className="poster">
                             <img src={`https://image.tmdb.org/t/p/w200${selectedMedia.poster_path}`}></img>
                         </div>
@@ -91,7 +93,7 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
                         </div>
                         {trailerVideo &&(<iframe className="trailer" src={`https://youtube.com/embed/${trailerVideo.key}`}></iframe>)}
                         <details><summary>{t.description}: </summary>{selectedMedia.overview}</details>
-                        <button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>
+                        {!isInLibrary?(<button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>):(<p>{t.inLibrary}</p>)}
                         {libraryMessage &&(<p>{libraryMessage}</p>)}
                     </div>
                 </div>

@@ -54,6 +54,7 @@ export const translations = {
         fillAllFields: "Please fill out all fields!",
         noMediaMatches: "No media matches these filters.",
         remove: "Remove",
+        inLibrary: "In your library!",
 
         // General
         previous: "Previous",
@@ -74,6 +75,9 @@ export const translations = {
         viewLibrary: "View Library",
         browseMedia: "Browse Media",
         menu: "MENU",
+        totalMovies: "Total Movies: ",
+        totalTvShows: "Total Tv Shows: ",
+        viewAll: "View All",
     },
 
     de: {
@@ -131,6 +135,7 @@ export const translations = {
         fillAllFields: "Bitte alle Felder ausfüllen!",
         noMediaMatches: "Keine Medien entsprechen diesen Filtern.",
         remove: "Entfernen",
+        inLibrary: "In deiner Bibliothek!",
 
         // General
         previous: "Zurück",
@@ -153,5 +158,8 @@ export const translations = {
         viewLibrary: "Bibliothek ansehen",
         browseMedia: "Medien durchsuchen",
         menu: "MENÜ",
+        totalMovies: "Filme Gesamt: ",
+        totalTvShows: "Serien Gesamt: ",
+        viewAll: "Alle anzeigen",
     }
 };

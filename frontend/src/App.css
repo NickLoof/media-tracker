@@ -3,27 +3,32 @@ body{
     font-family: "Inter", sans-serif;
     background-color: #050511;
     color: rgb(191, 146, 218);
+    margin: 0;
 }
 button{
     cursor: pointer;
 }
 .side-menu{
-    width: 400px;
-    position: sticky;
-    top: 20px;
+    width: 350px;
+    position: fixed;
+    top: 0px;
     align-self: flex-start;
+    height: 100vh;
+    padding-left: 20px;
+    border-right: 1px solid rgb(122, 122, 122);
+    box-sizing: border-box;
 }
 .page-content{
-    border-left: 1px solid rgb(122, 122, 122);
-    width: stretch;
     position: relative;
-    top: 60px;
+    width: calc(100%-350px);
+    min-height: 100vh;
+    margin-left: 350px;
     min-height: 100vh;
 }
 .language-picker{
     position: absolute;
-    top: 20px;
-    right: 20px;
+    bottom: 20px;
+    left: 10px;
 }
 .language-button{
     border: solid rgb(0, 0, 0);
@@ -71,7 +76,6 @@ button{
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-left: 15px;
 }
 .title-icon{
     color:#dbc1e7;
@@ -80,7 +84,4 @@ button{
     background: linear-gradient(to bottom right, rgb(238, 91, 243), #5f028a);
     border: 2px solid rgb(12, 12, 12);
     border-radius: 8px;
-}
-.page-layout{
-    display: flex;
 }

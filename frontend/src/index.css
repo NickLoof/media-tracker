@@ -1,0 +1,7 @@
+.movie-popup details {
+    width: fit-content;
+}
+
+.movie-popup summary {
+    cursor: pointer;
+}

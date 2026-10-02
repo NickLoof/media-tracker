@@ -1,44 +1,63 @@
+.library-layout{
+    padding-left: 20px;
+}
 .movie-card-body{
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-top: 20px;
-    
+    min-width: 200px;
+    transition: 0.3s;
     
 }
-.library-poster{
-    border: solid 2px;
-    border-radius: 4px;
+.movie-card-body:hover{
+    scale:1.1;
+    cursor: pointer;
 }
 .movie-card-info{
-    
+    padding-top: 0;
+    font-size: 10px;
+    color: rgb(191, 146, 218);
+}
+.library-poster{
+    border: solid 1px rgb(128, 128, 128);
+    border-radius: 5px;
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    box-shadow: 2px 2px 2px 2px rgb(10, 10, 10);
+}
+.status-select{
+    border-radius: 6px;
+    background-color: #670296;
+    font-weight: 600;
+    color: rgb(191, 146, 218);;
+}
+.movie-card-info h2,
+.movie-card-info p{
+    margin: 3px;
 }
 .movie-card h2 {
     font-weight: 700;
-    color: #c7c7c7;
 }
 .movie-card p {
     font-weight: 400;
-    color: #c7c7c7;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 .movie-card{
-    border: 2px solid #3a3a3a;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
-    width: 500px;
-    padding: 0 0 20px 20px;
+    display: flex;
+}
+.library-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 200px));
+    gap: 20px;
     margin-top: 20px;
-    margin-left: 20px;
-    transition: scale 0.3s;
-    background-color: #1e1e1e;
 }
 .movie-card:hover{
     scale: 1.02;
 }
 .details{
     font-family: "Inter", sans-serif;
-    font-weight: 400;
-    color: #c7c7c7;
+}
+.library-rating{
+    color: goldenrod;
 }
 .remove-button{
     border: solid rgb(0, 0, 0);

@@ -48,7 +48,7 @@ const Browse = () =>{
     
 
     return (
-        <div>
+        <div className="browse-layout">
             <h1>{t.browseAllMedia}</h1>
             <div>
                 <input type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
