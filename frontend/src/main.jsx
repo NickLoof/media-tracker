@@ -4,10 +4,12 @@ import './index.css';
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { LanguageProvider } from './context/languageContext.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <LanguageProvider>
         <App />
       </LanguageProvider>

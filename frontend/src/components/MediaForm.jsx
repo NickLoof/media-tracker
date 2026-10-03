@@ -143,7 +143,7 @@ const MediaForm = (props) => {
                         {searchResults.map((item) => (<div key={item.id} className="search-result" onClick={() => handleSelect(item)} >
                             {item.poster_path?(<img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
                             alt={item.title || item.name}/>):(<div className="no-poster">{t.noImage}</div>)}
-                            <p>{item.title || item.name}{item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)}</p></div>))}
+                            <p>{item.title || item.name}{" "}({item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)})</p></div>))}
                         </div>)}
                         </div>
                         <p>{t.resultsFound}: {searchResults.length}</p>

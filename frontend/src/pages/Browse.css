@@ -73,6 +73,11 @@
     box-shadow: 2.5px 2.5px 2.5px 2.5px #101011;
     margin-left: 5px;
 }
+.media-details-body {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
 .movie-overlay{
     position: fixed;
     z-index: 10;

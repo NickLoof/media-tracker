@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
+import { useSearchParams } from "react-router-dom";
 
 const Library = () => {
     const starCount = [1, 2, 3, 4, 5];
@@ -16,6 +17,8 @@ const Library = () => {
     const {language, setLanguage} = useContext(LanguageContext);
     const t = translations[language];
     const [selectedMedia, setSelectedMedia] = useState(null);
+    const [searchParams] = useSearchParams();
+    const statusFromUrl = searchParams.get("status");
 
     const showMediaForm = () => {
         setShowMedia(true);
@@ -66,6 +69,12 @@ const Library = () => {
         return (typeFilter === "All" || item.type === typeFilter) && (statusFilter === "All" || item.status === statusFilter);
     })
     
+    useEffect(() => {
+        if(statusFromUrl){
+            setStatusFilter(statusFromUrl);
+        }
+
+    }, [statusFromUrl])
 
   useEffect(() => {
   fetch("http://localhost:3000/media")
@@ -114,8 +123,10 @@ const Library = () => {
                     <div className="library-rating">
                         <div className="star-rating"> 
                         {starCount.map((star) => (
-                            <Star key={star} onClick={() => updateRating(item.id, star)} fill={item.rating >= star ? "currentColor" : "none"} /> 
+                            <Star key={star} onClick={() => updateRating(item.id, star)} fill={item.rating >= star ? "currentColor" : "none"} />
+                             
                         ))}
+                        <button className="remove-button" onClick={() => deleteMedia(item.id)}>{t.remove}</button>
                     </div>
                     </div>
                 </div>

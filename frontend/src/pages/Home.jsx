@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
-import {useState, useEffect} from "react";
 import "./home.css"
 import {Search, ArrowRight} from "lucide-react"
 import MediaDetails from "../components/MediaDetails";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const {language, setLanguage} = useContext(LanguageContext);
@@ -17,6 +17,7 @@ const Home = () => {
     const [watchingMedia, setWatchingMedia] = useState([]);
     const [movieCount, setMovieCount] = useState(0);
     const [tvShowCount, setTvShowCount] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(!isSearching){
@@ -75,36 +76,45 @@ const Home = () => {
                         <p>{item.title || item.name}{" "}({item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)})</p>
                         </div>))}</div>)}
                     {selectedMedia&&(
-                    <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.media_type === "movie" ? "Movie" : "Tv Show"} onClose={() => {setSelectedMedia(null); setInputValue("");}}/>)}
+                    <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.type || (selectedMedia.media_type === "movie" ? "Movie" : "Tv Show")} onClose={() => 
+                    {setSelectedMedia(null); setInputValue(""); setSearchResults([]); setIsSearching(false);}}/>)}
             </div>
             <div className="home-content">
                 <div className="heading">
                     <h1>{t.welcomeBack}</h1>
                 </div>
-                <h2>{t.recentlyAdded}</h2>
                 <div className="recently-added-section">
-                    <div className="recently-added-grid">
-                        {recentMedia.map((item) => (
-                            <div className="recently-added-card" key={item.id}>
+                    <div className="recently-added-layout">
+                        <div className="recently-added-title">
+                            <h2>{t.recentlyAdded}</h2>
+                        </div>
+                        <div className="recently-added-grid">
+                            {recentMedia.map((item) => (
+                            <div className="recently-added-card" key={item.id} onClick={() => handleMediaClick(item)}>
                                 <img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
                                 <p className="media-title">{item.title || item.name}{" "}({item.release_date?.slice(0, 4)})</p>  
                             </div>))}
-                    </div>
+                        </div>
+                    </div>    
                     <div className="view-all">
-                        <button className="view-all-button"><ArrowRight className="arrow"/>{t.viewAll}</button>
+                        <button className="view-all-button" onClick={() => navigate("/library")}><ArrowRight className="arrow"/>{t.viewAll}</button>
                     </div>
                 </div>
-                <h2>{t.continueWatching}</h2>
                 <div className="continue-watching-section">
-                    <div className="continue-watching-grid">
-                        {watchingMedia.map((item) => (
-                            <div className="continue-watching-card" key={item.id}>
-                                <img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
-                                <p className="media-title">{item.title || item.name}{" "}({item.release_date?.slice(0, 4)})</p>
-                            </div>))}
+                    <div className="continue-watching-layout">
+                        <div className="continue-watching-title">
+                            <h2>{t.continueWatching}</h2>
+                        </div>
+                        <div className="continue-watching-grid"> 
+                            {watchingMedia.map((item) => (
+                                <div className="continue-watching-card" key={item.id} onClick={() => handleMediaClick(item)}>
+                                    <img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
+                                    <p className="media-title">{item.title || item.name}{" "}({item.release_date?.slice(0, 4)})</p>
+                                </div>))}
+                        </div>
                     </div>
                     <div className="view-all">
-                        <button className="view-all-button"><ArrowRight className="arrow"/>{t.viewAll}</button>
+                        <button className="view-all-button" onClick={() => navigate("/library?status=Watching")}><ArrowRight className="arrow"/>{t.viewAll}</button>
                     </div>
                 </div>
                 <div className="your-library">
@@ -129,12 +139,12 @@ const Home = () => {
                         </div>
                         <div className="library-count">
                             <div className="display-percentage">
-                                <p>{t.movies}</p>
-                                <p>{moviePercentage.toFixed(2)}%</p>
+                                <p className="movie-percentage">{t.movies}</p>
+                                <p className="movie-percentage">{moviePercentage.toFixed(2)}%</p>
                             </div>
                             <div className="display-percentage">
-                                <p>{t.tvShows}</p>
-                                <p>{tvShowPrecentage.toFixed(2)}%</p>
+                                <p className="tv-percentage">{t.tvShows}</p>
+                                <p className="tv-percentage">{tvShowPrecentage.toFixed(2)}%</p>
                             </div>
                         </div>
                     </div>

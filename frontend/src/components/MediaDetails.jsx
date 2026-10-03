@@ -20,6 +20,9 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
         if(!selectedMedia){
             return;
         }
+        console.log("SELECTED MEDIA:", selectedMedia);
+        console.log("TYPE:", type);
+        console.log("TMDB ID:", tmdbId);
         fetch(`http://localhost:3000/media-details/${tmdbId}?type=${type}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
@@ -92,7 +95,7 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
                         </div>
                         </div>
                         {trailerVideo &&(<iframe className="trailer" src={`https://youtube.com/embed/${trailerVideo.key}`}></iframe>)}
-                        <details><summary>{t.description}: </summary>{selectedMedia.overview}</details>
+                        <details><summary>{t.description}: </summary>{movieDetails?.overview}</details>
                         {!isInLibrary?(<button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>):(<p>{t.inLibrary}</p>)}
                         {libraryMessage &&(<p>{libraryMessage}</p>)}
                     </div>

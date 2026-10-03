@@ -83,9 +83,19 @@
     width: fit-content;
     padding: 30px;
     box-sizing: border-box;
+}
+.recently-added-section{
+    display: flex;
+    align-items: stretch;
+}
+.recently-added-layout{
     border: 1px solid gray;
     border-radius: 30px 0 0 30px;
     background-color:#0a0a13;
+    box-sizing: border-box;
+}
+.recently-added-layout h2{
+    padding-left: 30px;
 }
 .recently-added-card{
     margin-right: 15px;
@@ -107,13 +117,10 @@
 }
 .view-all{
     display: flex;
-    align-self: center;
-    justify-content: center;
-    height: 400px;
     width: 200px;
 }
 .view-all-button{
-    height: 400px;
+    height: 100%;
     width: 200px;
     border-radius: 0 20px 20px 0;
     color: rgb(191, 146, 218);
@@ -146,17 +153,23 @@
 }
 .continue-watching-section{
     display: flex;
+    align-items: stretch;
+    margin-top: 40px;
+}
+.continue-watching-layout{
+    padding: 30px;
+    padding-top: 10px;
+    border: 1px solid gray;
+    border-radius: 30px 0 0 30px;
+    background-color:#0a0a13;
+    box-sizing: border-box;
 }
 .continue-watching-grid{
     display: grid;
     grid-template-columns: repeat(5, 150px);
     gap: 35px;
     width: fit-content;
-    padding: 30px;
     box-sizing: border-box;
-    border: 1px solid gray;
-    border-radius: 30px 0 0 30px;
-    background-color:#0a0a13;
 }
 .continue-watching-card{
     margin-right: 15px;
@@ -209,6 +222,7 @@
 }
 .library-stats-overview{
     display: flex;
+    justify-content: center;
 }
 .stats-card{
     border: solid 1px gray;
@@ -217,10 +231,19 @@
     padding: 15px;
     background-color: #1c1c29;
 }
+.stats-card h2{
+    text-align: center;
+}
 .stats-stats{
     display: flex;
 }
 .display-percentage{
     display: flex;
     gap: 200px
+}
+.movie-percentage{
+    color:  #ae05fc;
+}
+.tv-percentage{
+    color:  #673aed;
 }
