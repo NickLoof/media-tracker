@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
 import "./home.css"
@@ -18,6 +18,8 @@ const Home = () => {
     const [movieCount, setMovieCount] = useState(0);
     const [tvShowCount, setTvShowCount] = useState(0);
     const navigate = useNavigate();
+    const recentlyAddedRef = useRef(null);
+    const continueWatchingRef = useRef(null);
 
     useEffect(() => {
         if(!isSearching){
@@ -53,6 +55,15 @@ const Home = () => {
         })
     }, [])
 
+    useEffect(() => {
+        if(recentlyAddedRef.current){
+        recentlyAddedRef.current.scrollLeft = 0;
+        }
+        if(continueWatchingRef.current){
+        continueWatchingRef.current.scrollLeft = 0;
+        }
+    }, [recentMedia, watchingMedia])
+
     const totalMedia = movieCount + tvShowCount;
     const moviePercentage = totalMedia > 0 ? (movieCount / totalMedia) * 100 : 0;
     const tvShowPrecentage = totalMedia > 0 ? (tvShowCount / totalMedia) * 100 : 0;
@@ -60,7 +71,6 @@ const Home = () => {
     const handleMediaClick = (item) => {
         setSelectedMedia(item);
         setIsSearching(false);
-
     }
 
     return (
@@ -88,16 +98,17 @@ const Home = () => {
                         <div className="recently-added-title">
                             <h2>{t.recentlyAdded}</h2>
                         </div>
-                        <div className="recently-added-grid">
+                        <div className="recently-added-grid" ref={recentlyAddedRef}>
                             {recentMedia.map((item) => (
                             <div className="recently-added-card" key={item.id} onClick={() => handleMediaClick(item)}>
                                 <img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
                                 <p className="media-title">{item.title || item.name}{" "}({item.release_date?.slice(0, 4)})</p>  
                             </div>))}
+                                <button className="mobile-view-all" onClick={() => navigate("/library")}>{t.viewAll}<ArrowRight className="arrow"/></button>
                         </div>
                     </div>    
                     <div className="view-all">
-                        <button className="view-all-button" onClick={() => navigate("/library")}><ArrowRight className="arrow"/>{t.viewAll}</button>
+                        <button className="view-all-button" onClick={() => navigate("/library")}>{t.viewAll}<ArrowRight className="arrow"/></button>
                     </div>
                 </div>
                 <div className="continue-watching-section">
@@ -105,16 +116,17 @@ const Home = () => {
                         <div className="continue-watching-title">
                             <h2>{t.continueWatching}</h2>
                         </div>
-                        <div className="continue-watching-grid"> 
+                        <div className="continue-watching-grid" ref={continueWatchingRef}> 
                             {watchingMedia.map((item) => (
                                 <div className="continue-watching-card" key={item.id} onClick={() => handleMediaClick(item)}>
                                     <img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
                                     <p className="media-title">{item.title || item.name}{" "}({item.release_date?.slice(0, 4)})</p>
                                 </div>))}
+                                <button className="mobile-view-all" onClick={() => navigate("/library?status=Watching")}>{t.viewAll}<ArrowRight className="arrow"/></button>
                         </div>
                     </div>
                     <div className="view-all">
-                        <button className="view-all-button" onClick={() => navigate("/library?status=Watching")}><ArrowRight className="arrow"/>{t.viewAll}</button>
+                        <button className="view-all-button" onClick={() => navigate("/library?status=Watching")}>{t.viewAll}<ArrowRight className="arrow"/></button>
                     </div>
                 </div>
                 <div className="your-library">
@@ -122,11 +134,11 @@ const Home = () => {
                     <h2>{t.yourLibrary}</h2>
                     </div>
                     <div className="library-stats-overview">
-                        <div className="stats-card">
+                        <div className="stats-card stats-card-movie">
                             <h2>{movieCount}</h2>
                             <p>{t.totalMovies}</p>
                         </div>
-                        <div className="stats-card">
+                        <div className="stats-card stats-card-tv">
                             <h2>{tvShowCount}</h2>
                             <p>{t.totalTvShows}</p>
                         </div>

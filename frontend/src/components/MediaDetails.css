@@ -1,0 +1,36 @@
+
+
+
+
+@media (max-width: 768px){
+    .movie-popup{
+        width: 95%;
+    }
+    .media-details-body{
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    .poster img {
+        width: 150px;
+        max-width: 100%;
+    }
+    .movie-info{
+        width: 100%;
+    }
+    .movie-info p:first-child {
+        margin-top: 0;
+    }
+    .trailer{
+        width: 90%;
+        aspect-ratio: 16/9;
+        height: auto;
+    }
+    .modal-details {
+        margin-inline: 20px;
+    }
+    .library-status{
+        margin: 10px 20px;
+    }
+    
+}

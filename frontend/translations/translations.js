@@ -75,8 +75,8 @@ export const translations = {
         viewLibrary: "View Library",
         browseMedia: "Browse Media",
         menu: "MENU",
-        totalMovies: "Total Movies: ",
-        totalTvShows: "Total Tv Shows: ",
+        totalMovies: "Total Movies",
+        totalTvShows: "Total Tv Shows",
         viewAll: "View All",
     },
 
@@ -158,8 +158,8 @@ export const translations = {
         viewLibrary: "Bibliothek ansehen",
         browseMedia: "Medien durchsuchen",
         menu: "MENÜ",
-        totalMovies: "Filme Gesamt: ",
-        totalTvShows: "Serien Gesamt: ",
+        totalMovies: "Filme Gesamt",
+        totalTvShows: "Serien Gesamt",
         viewAll: "Alle anzeigen",
     }
 };

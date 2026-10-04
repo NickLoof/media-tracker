@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
+import "./MediaDetails.css";
 
 const MediaDetails = ({selectedMedia, type, onClose}) => {
 
@@ -95,8 +96,8 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
                         </div>
                         </div>
                         {trailerVideo &&(<iframe className="trailer" src={`https://youtube.com/embed/${trailerVideo.key}`}></iframe>)}
-                        <details><summary>{t.description}: </summary>{movieDetails?.overview}</details>
-                        {!isInLibrary?(<button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>):(<p>{t.inLibrary}</p>)}
+                        <details className="modal-details"><summary>{t.description}: </summary>{movieDetails?.overview}</details>
+                        {!isInLibrary?(<button className="add-to-library-button" onClick={() => addToLibrary()}>{t.addToLibrary}</button>):(<p className="library-status">{t.inLibrary}</p>)}
                         {libraryMessage &&(<p>{libraryMessage}</p>)}
                     </div>
                 </div>
