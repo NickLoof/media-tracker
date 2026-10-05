@@ -153,6 +153,7 @@ const Home = () => {
                     <div className="library-stats-title">
                     <h2>{t.yourLibrary}</h2>
                     </div>
+                    <div className="library-stats-body">
                     <div className="library-stats-overview">
                         <div className="stats-card stats-card-movie">
                             <h2>{movieCount}</h2>
@@ -179,6 +180,7 @@ const Home = () => {
                                 <p className="tv-percentage">{tvShowPrecentage.toFixed(2)}%</p>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
+import { Search } from "lucide-react";
 
 const Browse = () =>{
     const [page, setPage] = useState(1);
@@ -57,9 +58,11 @@ const Browse = () =>{
     return (
         <div className="browse-layout">
             <h1>{t.browseAllMedia}</h1>
-            <div>
-                <input type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
+            <div className="browse-search-wrapper">
+                <Search className="browse-search-icon"/>
+                <input className="browse-searchbar" type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
             </div>
+            <div className="filter-group">
             <div className="type-filters">
                 <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>{t.movies}</button>
                 <button className={typeFilter === "Tv Show" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Tv Show"); setGenreFilter(""); setPage(1);}}>{t.tvShows} </button> 
@@ -69,9 +72,10 @@ const Browse = () =>{
                 <button className={category === "New Releases" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("New Releases"); setPage(1);}}>{t.newReleases}</button> 
                 <button className={category === "Top Rated" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Top Rated"); setPage(1);}}>{t.topRated}</button>
             </div>
+            </div>
             <div>
-                <label htmlFor="genreSelect">{t.genre}: </label>
-                <select id="genreSelect" value={genreFilter} onChange={(event) => {setGenreFilter(event.target.value); setPage(1)}}>
+                <label htmlFor="genre-select">{t.genre}: </label>
+                <select className="genre-select" value={genreFilter} onChange={(event) => {setGenreFilter(event.target.value); setPage(1)}}>
                     <option value={""}>{t.allGenres}</option>
                     {genres.map((genre) => (<option key={genre.id} value={genre.id}>{genre.name}</option>))}
                 </select>
@@ -88,10 +92,12 @@ const Browse = () =>{
                     </div>
                 </div>))}
             </div>
-            <p>{t.currentPage}: {page}</p>
-            <button className="page-button" onClick={() => setPage(page>=2?(page - 1):(page))}>{t.previous}</button>
-            {pageNumbers.map((number) => <button className={number === page ? "page-button-active":"page-button"} key={number} onClick={() => setPage(number)}>{number}</button>)}
-            <button className="page-button" onClick={() => setPage(page<totalPages?page +1:page)}>{t.next}</button>
+            {/*<p>{t.currentPage}: {page}</p>*/}
+            <div className="page-navigation">
+                <button className="previous-button" onClick={() => setPage(page>=2?(page - 1):(page))}>{t.previous}</button>
+                    {pageNumbers.map((number) => <button className={number === page ? "page-button-active":"page-button"} key={number} onClick={() => setPage(number)}>{number}</button>)}
+                <button className="next-button" onClick={() => setPage(page<totalPages?page +1:page)}>{t.next}</button>
+            </div>
         </div>
     );
 };

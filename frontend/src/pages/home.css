@@ -2,18 +2,18 @@
     width: 100%;
 }
 .home-searchbar{
-    background: linear-gradient(to bottom right, rgb(188, 116, 221), rgb(24, 14, 63));
+    background-color: rgb(22, 21, 22);
     width: 100%;
     box-sizing: border-box;
     height: 40px;
-    border-radius: 10px;
-    color: rgb(32, 29, 32);
+    border-radius: 30px;
+    color: rgb(192, 192, 192);
     font-size: 20px;
     border: 1px solid gray;
     padding-left: 40px;
 }
 .home-searchbar::placeholder{
-    color: rgb(57, 31, 63);
+    color: rgb(187, 186, 187);
     font-size: 20px;
 }
 .search-container{
@@ -103,9 +103,7 @@
     box-sizing: border-box;
     padding: 30px;
     padding-top: 10px;
-}
-.recently-added-layout h2{
-    padding-left: 30px;
+    width: 950;
 }
 .recently-added-card{
     margin-right: 15px;
@@ -113,17 +111,20 @@
     width: 150px;
     background-color: rgba(13, 12, 14, 0.6);
     border-radius: 15px;
+    border: 1px solid gray;
+    transition: 0.3s;
 }
 .recently-added-card img{
     width: 100%;
 }
 .recently-added-card:hover{
-    scale: 1.05;
     cursor: pointer;
+    transform: translateY(-8px);
+    border-color: #ae05fc;
 }
 .media-title{
     margin-top: 0;
-    padding-top: 8px;
+    padding: 5px;
 }
 .view-all{
     display: flex;
@@ -131,7 +132,7 @@
 }
 .view-all-button{
     height: 100%;
-    width: 200px;
+    width: 115px;
     border-radius: 0 20px 20px 0;
     color: rgb(191, 146, 218);
     font-size: 30px;
@@ -157,6 +158,9 @@
 .recently-added-section{
     display: flex;
 }
+.recently-added-title h2{
+    margin-top: 10px;
+}
 .arrow{
     width: 35px;
     height: 35px;
@@ -168,11 +172,12 @@
 }
 .continue-watching-layout{
     padding: 30px;
-    padding-top: 10px;
+    padding-top: 0;
     border: 1px solid gray;
     border-radius: 30px 0 0 30px;
     background-color:#0a0a13;
     box-sizing: border-box;
+    width: 950px;
 }
 .continue-watching-grid{
     display: grid;
@@ -187,13 +192,16 @@
     width: 150px;
     background-color: rgba(13, 12, 14, 0.6);
     border-radius: 15px;
+    border: 1px solid gray;
+    transition: 0.3s;
 }
 .continue-watching-card img{
     width: 100%;
 }
 .continue-watching-card:hover{
-    scale: 1.05;
     cursor: pointer;
+    transform: translateY(-3px);
+    border-color: #ae05fc;
 }
 .library-chart{
     border: solid;
@@ -203,6 +211,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.library-stats-title h2{
+    margin: 0;
+    margin-bottom: 15px;
 }
 .chart-center{
     border: solid;
@@ -217,10 +229,10 @@
 .your-library{
     border: 1px solid gray;
     border-radius: 30px;
-    padding: 30px;
+    padding: 25px;
     display: grid;
     margin-bottom: 40px;
-    width: fit-content;
+    width: 1065px;
     box-sizing: border-box;
     background-color:#0a0a13;
     margin-top: 40px;
@@ -233,6 +245,10 @@
 .library-stats-overview{
     display: flex;
     justify-content: center;
+    margin-right: 20px;
+}
+.library-stats-body{
+    display: flex;
 }
 .stats-card{
     border: solid 1px gray;
@@ -256,11 +272,12 @@
 }
 .display-percentage{
     display: flex;
-    gap: 200px;
+    gap: 100px;
     margin-top: -20px;
 }
 .movie-percentage{
     color:  #ae05fc;
+    margin-bottom: 60px;
 }
 .tv-percentage{
     color:  #673aed;
