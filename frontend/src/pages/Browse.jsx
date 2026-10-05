@@ -44,6 +44,13 @@ const Browse = () =>{
         .then((data) => {
             setGenres(data.genres)});
     },[typeFilter])
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behaviour: "smooth"
+        });
+    }, [page])
    
     
 
@@ -53,13 +60,13 @@ const Browse = () =>{
             <div>
                 <input type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
             </div>
-            <div>
-                <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>{t.movies}</button> |
+            <div className="type-filters">
+                <button className={typeFilter === "Movie" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Movie"); setGenreFilter(""); setPage(1);}}>{t.movies}</button>
                 <button className={typeFilter === "Tv Show" ?"filter-button-active":"filter-button"} onClick={() => {setTypeFilter("Tv Show"); setGenreFilter(""); setPage(1);}}>{t.tvShows} </button> 
             </div>
-            <div>
-                <button className={category === "Popular" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Popular"); setPage(1);}}>{t.popular}</button> |
-                <button className={category === "New Releases" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("New Releases"); setPage(1);}}>{t.newReleases}</button> |
+            <div className="category-filters">
+                <button className={category === "Popular" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Popular"); setPage(1);}}>{t.popular}</button>
+                <button className={category === "New Releases" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("New Releases"); setPage(1);}}>{t.newReleases}</button> 
                 <button className={category === "Top Rated" ?"filter-button-active":"filter-button"} onClick={() => {setCategory("Top Rated"); setPage(1);}}>{t.topRated}</button>
             </div>
             <div>

@@ -20,6 +20,7 @@ const Home = () => {
     const navigate = useNavigate();
     const recentlyAddedRef = useRef(null);
     const continueWatchingRef = useRef(null);
+    const searchAreaRef = useRef(null);
 
     useEffect(() => {
         if(!isSearching){
@@ -64,6 +65,22 @@ const Home = () => {
         }
     }, [recentMedia, watchingMedia])
 
+    useEffect(() => {
+        const handleClickOutside = (event) =>{
+            if(
+                searchAreaRef.current &&
+                !searchAreaRef.current.contains(event.target)
+            ){
+                setIsSearching(false);
+            } 
+            
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return() =>{
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+    }, [])
+
     const totalMedia = movieCount + tvShowCount;
     const moviePercentage = totalMedia > 0 ? (movieCount / totalMedia) * 100 : 0;
     const tvShowPrecentage = totalMedia > 0 ? (tvShowCount / totalMedia) * 100 : 0;
@@ -76,15 +93,18 @@ const Home = () => {
     return (
         <>
             <div className="home-layout">
-            <div className="search-container">
-                <Search className="search-icon"/>
-                <input value={inputValue} type="text" className="home-searchbar" placeholder={t.searchMedia} onChange={(event) => {setInputValue(event.target.value);
-                    setSelectedMedia(null); setIsSearching(true);}} onFocus={() => setIsSearching(true)}/>
-                {isSearching && searchResults.length > 0 && (<div className="search-dropdown">
-                    {searchResults.map((item) => (<div className="search-result" key={item.id} onClick={() => handleMediaClick(item)}>
-                        {item.poster_path?(<img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>):(<div className="no-poster">{t.noImage}</div>)}
-                        <p>{item.title || item.name}{" "}({item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)})</p>
-                        </div>))}</div>)}
+            <div className="search-container" >
+                <div className="home-search-wrapper" ref={searchAreaRef}>
+                    <Search className="search-icon"/>
+                    <input value={inputValue} type="text" className="home-searchbar" placeholder={t.searchMedia} onChange={(event) => {setInputValue(event.target.value);
+                        setSelectedMedia(null); setIsSearching(true);}} onFocus={() => setIsSearching(true)}/>
+                    {isSearching && searchResults.length > 0 && (<div className="home-search-dropdown">
+                        {searchResults.map((item) => (<div className="search-result" key={item.id} onClick={() => handleMediaClick(item)}>
+                            {item.poster_path?(<img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>)
+                            :(<div className="no-poster">{t.noImage}</div>)}
+                            <p>{item.title || item.name}{" "}({item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)})</p>
+                            </div>))}</div>)}
+                </div>            
                     {selectedMedia&&(
                     <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.type || (selectedMedia.media_type === "movie" ? "Movie" : "Tv Show")} onClose={() => 
                     {setSelectedMedia(null); setInputValue(""); setSearchResults([]); setIsSearching(false);}}/>)}

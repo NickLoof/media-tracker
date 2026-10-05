@@ -1,6 +1,46 @@
-
-
-
+.movie-popup{
+    z-index: 15;
+    display: grid;
+    position: relative;
+    gap:20px;
+    border: 2px solid #3a3a3a;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+    padding: 0;
+    transition: scale 0.3s;
+    background-color: #1e1e1e;
+    box-sizing: border-box;
+    width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-bottom: 30px;
+}
+.media-details-body {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+.movie-info{
+    position: relative;
+}
+.trailer{
+    width: 80%;
+    aspect-ratio: 16/9;
+    justify-self: center;
+}
+.movie-backdrop {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    height: 120px;
+    box-shadow: 0 6px rgb(0 0 0 /40%);
+    background-size: cover;
+    background-position: center;
+    border-radius: 18px 18px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
 
 @media (max-width: 768px){
     .movie-popup{
