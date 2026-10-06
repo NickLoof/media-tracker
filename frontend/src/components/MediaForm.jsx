@@ -1,4 +1,4 @@
-import {Star, CircleX} from "lucide-react"
+import {Star, CircleX, Search} from "lucide-react"
 import { useState, useEffect, useRef, Fragment} from "react";
 import "./MediaForm.css"
 import { useContext } from "react";
@@ -132,12 +132,13 @@ const MediaForm = (props) => {
         <>
             <form onSubmit={handleSubmit}>
                 <fieldset className="media-form">
-                    <button type="button" className="close-button" onClick={props.hideMediaForm}><CircleX /></button>
+                    <button type="button" className="media-form-close-button" onClick={props.hideMediaForm}><CircleX/></button>
                     <legend>{t.addMedia}</legend>
                         <div className="search-header">
                         <label htmlFor="title">{t.title}: </label>
                         <div className="search-container" ref={searchRef}>
-                        <input id="Title" placeholder={t.enterTitle} value={title} onChange={(event) => {setTitle(event.target.value); setSelectedMedia(null); setIsSearching(true);}}
+                            <Search className="media-form-search-icon"/>
+                        <input className="media-form-searchbar" placeholder={t.enterTitle} value={title} onChange={(event) => {setTitle(event.target.value); setSelectedMedia(null); setIsSearching(true);}}
                         onFocus={() => setIsSearching(true)}/>
                         {isSearching && searchResults.length > 0 && (<div className="search-dropdown">
                         {searchResults.map((item) => (<div key={item.id} className="search-result" onClick={() => handleSelect(item)} >
@@ -146,34 +147,46 @@ const MediaForm = (props) => {
                             <p>{item.title || item.name}{" "}({item.media_type === "movie" ? item.release_date?.slice(0, 4): item.first_air_date?.slice(0, 4)})</p></div>))}
                         </div>)}
                         </div>
+                        {isSearching && title && (
                         <p>{t.resultsFound}: {searchResults.length}</p>
+                        )}
                     </div>
-                    <label htmlFor="typeSelect">{t.type}: </label>
-                    <select id="typeSelect" className="media-select" value={type} onChange={(event) => setType(event.target.value)}>
-                        <option value="" disabled>{t.select}</option>
-                        <option value="Movie">{t.movie}</option>
-                        <option value="Tv Show">{t.tvShow}</option>
-                    </select>
-                    <label htmlFor="genreCheckbox">{t.genre}: </label>
-                    {selectedMedia?<p>{genre.join(", ")}</p>:
-                    (genreOptions.map((genreOption) => (<Fragment key={genreOption}>
-                            <input value ={genreOption} type="checkbox" id="genreCheckbox" checked={genre.includes(genreOption)} onChange={() => handleGenreChange(genreOption)}/>
-                            <label htmlFor="genreCheckbox">{genreOption}</label>
-                            </Fragment>)))}
-                    <label htmlFor="statusSelect">{t.status}: </label>
-                    <select id="statusSelect" className="media-select" value={status} onChange={(event) => setStatus(event.target.value)}>
-                        <option value="" disabled>{t.select}</option>
-                        <option value=" Want to Watch">{t.wantToWatch}</option>
-                        <option value="Watching">{t.watching}</option>
-                        <option value="Completed">{t.completed}</option>
-                        <option value="On Hold">{t.onHold}</option>
-                        <option value="Dropped">{t.dropped}</option>
-                    </select>
-                    <div id="ratingSelect" className="star-rating">{t.rating}: 
+                    <div className="media-form-filter-select">
+                        <div className="media-form-type-select-container">
+                            <label htmlFor="media-form-type-select">{t.type}: </label>
+                            <select className="media-form-type-select" value={type} onChange={(event) => setType(event.target.value)}>
+                                <option value="" disabled>{t.select}</option>
+                                <option value="Movie">{t.movie}</option>
+                                <option value="Tv Show">{t.tvShow}</option>
+                            </select>
+                        </div>
+                        <div className="media-form-genre-select-container">
+                            <label>{t.genre}: </label>
+                            <div className="media-form-genres">
+                                {selectedMedia?<p>{genre.join(", ")}</p>:
+                                (genreOptions.map((genreOption) => (<Fragment key={genreOption}>
+                                <input className="media-form-genre-checkbox" value ={genreOption} type="checkbox" id={`genre-${genreOption}`} 
+                                checked={genre.includes(genreOption)} onChange={() => handleGenreChange(genreOption)}/>
+                                <label className="media-form-genre-chip" htmlFor={`genre-${genreOption}`}>{genreOption}</label>
+                                </Fragment>)))}
+                            </div>
+                        </div>
+                        <div className="media-form-status-select-container">
+                            <label htmlFor="media-form-status-select">{t.status}: </label>
+                            <select className="media-form-status-select" value={status} onChange={(event) => setStatus(event.target.value)}>
+                                <option value="" disabled>{t.select}</option>
+                                <option value=" Want to Watch">{t.wantToWatch}</option>
+                                <option value="Watching">{t.watching}</option>
+                                <option value="Completed">{t.completed}</option>
+                                <option value="On Hold">{t.onHold}</option>
+                                <option value="Dropped">{t.dropped}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="ratingSelect" className="media-form-star-rating">{t.rating}: 
                         {starCount.map((star) => (
-                            <Star key={star} onClick={() => setRating(star)} fill={rating >= star ? "currentColor" : "none"} /> 
+                            <Star className="media-form-star" key={star} onClick={() => setRating(star)} fill={rating >= star ? "currentColor" : "none"} /> 
                         ))}
-                        <p>{t.selectedRating}: {rating}</p>
                     </div>
                     <button className="submit-button" type="submit">{t.addMedia}</button>
                     <p>{errorMessage}</p>
