@@ -3,7 +3,7 @@ import MediaForm from "../components/MediaForm";
 import "./Library.css";
 import {Star} from "lucide-react"
 import { useContext } from "react";
-import { LanguageContext } from "../context/languageContext";
+import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
 import { useSearchParams } from "react-router-dom";
@@ -13,12 +13,12 @@ const Library = () => {
     const [media, setMedia] = useState([]);
     const [showMedia, setShowMedia] = useState(false);
     const [typeFilter, setTypeFilter] = useState("All");
-    const [statusFilter, setStatusFilter] = useState("All");
-    const {language, setLanguage} = useContext(LanguageContext);
-    const t = translations[language];
-    const [selectedMedia, setSelectedMedia] = useState(null);
     const [searchParams] = useSearchParams();
     const statusFromUrl = searchParams.get("status");
+    const [statusFilter, setStatusFilter] = useState(statusFromUrl || "All");
+    const {language} = useContext(LanguageContext);
+    const t = translations[language];
+    const [selectedMedia, setSelectedMedia] = useState(null);
 
     const showMediaForm = () => {
         setShowMedia(true);
@@ -68,13 +68,7 @@ const Library = () => {
     const filteredMedia = media.filter((item) => {
         return (typeFilter === "All" || item.type === typeFilter) && (statusFilter === "All" || item.status === statusFilter);
     })
-    
-    useEffect(() => {
-        if(statusFromUrl){
-            setStatusFilter(statusFromUrl);
-        }
 
-    }, [statusFromUrl])
 
   useEffect(() => {
   fetch("http://localhost:3000/media")
@@ -86,8 +80,11 @@ const Library = () => {
   });
   }, []);
     return (
+        <>
+        <div className="library-title-container">
+                <h1>{t.myLibrary}</h1>
+        </div>
         <div className="library-layout">
-            <h1>{t.myLibrary}</h1>
             <button className="add-button" onClick={showMediaForm}>+ {t.addMedia}</button>
             <div className="type-filter">
                 <button className={typeFilter === "All" ? "filter-button-active":"filter-button"} onClick={() => setTypeFilter("All")}>{t.all}</button>
@@ -136,6 +133,7 @@ const Library = () => {
             })}
             </div>
         </div>
+        </>
     );
 };
                     {/*<p>{t.type}: {item.type}</p>

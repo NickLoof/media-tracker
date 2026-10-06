@@ -4,9 +4,10 @@ import Home from "./pages/Home.jsx";
 import Library from "./pages/Library.jsx";
 import Browse from "./pages/Browse.jsx";
 import {useContext, useState} from "react";
-import { LanguageContext } from './context/languageContext.jsx';
+import { LanguageContext } from './context/languageContext.js';
 import { translations } from '../translations/translations.js';
 import {House, LibraryBig, Globe, TvMinimalPlay, Menu, CircleX} from "lucide-react";
+import tmdblogo from "./assets/tmdb-logo.svg";
 
 function App() {
   const {language, setLanguage} = useContext(LanguageContext);
@@ -29,9 +30,15 @@ function App() {
           <NavLink to="/library" onClick={() => setMenuOpen(false)} className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><LibraryBig/> {t.library} </NavLink>
           <NavLink to="/browse" onClick={() => setMenuOpen(false)} className={({isActive}) => isActive? "page-link page-link-active": "page-link"}><Globe/> {t.browseMedia}</NavLink>
         </div>
-        <div className="language-picker">
-          <button className="language-button" onClick={() => setLanguage("en")}>{t.english}</button>
-          <button className="language-button" onClick={() => setLanguage("de")}>{t.german}</button>
+        <div className='sidebar-footer'>
+          <div className='tmdb-attribution'>
+            <img src={tmdblogo} alt="TMDB logo"/>
+            <p>This product uses TMDB API but is not endorsed or certified by TMDB.</p>
+          </div>
+          <div className="language-picker">
+            <button className="language-button" onClick={() => setLanguage("en")}>{t.english}</button>
+            <button className="language-button" onClick={() => setLanguage("de")}>{t.german}</button>
+          </div>
         </div>
       </div>
       

@@ -21,7 +21,7 @@
     align-items: center;
     border-bottom: 1px solid gray;
     background-color: #1c1c29;
-    height: 100px;
+    height: 85px;
     padding: 15px;
     position: relative;
     width: 100%;
@@ -85,30 +85,31 @@
 .search-result:hover{
     background-color: #272727;
 }
-.recently-added-grid{
-    display: grid;
-    grid-template-columns: repeat(5, 150px);
-    gap: 35px;
-    width: fit-content;
-    box-sizing: border-box;
-}
-.recently-added-section{
+.recently-added-grid,
+.continue-watching-grid{
     display: flex;
-    align-items: stretch;
+    gap: 35px;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    padding-bottom: 15px;
 }
-.recently-added-layout{
+.recently-added-layout,
+.continue-watching-layout{
     border: 1px solid gray;
     border-radius: 30px 0 0 30px;
     background-color:#0a0a13;
     box-sizing: border-box;
-    padding: 30px;
-    padding-top: 10px;
-    width: 950;
+    padding: 10px 20px 20px 20px;
+    width: 100%;
+    min-width: 0;
 }
-.recently-added-card{
-    margin-right: 15px;
+.recently-added-card,
+.continue-watching-card{
     display: block;
     width: 150px;
+    min-width: 150px;
+    flex-shrink: 0;
     background-color: rgba(13, 12, 14, 0.6);
     border-radius: 15px;
     border: 1px solid gray;
@@ -132,7 +133,7 @@
 }
 .view-all-button{
     height: 100%;
-    width: 115px;
+    width: 130px;
     border-radius: 0 20px 20px 0;
     color: rgb(191, 146, 218);
     font-size: 30px;
@@ -155,8 +156,12 @@
 .view-all-button:hover {
     background-position: right;
 }
-.recently-added-section{
+.recently-added-section,
+.continue-watching-section{
     display: flex;
+    width: 75%;
+    min-width: 0;
+    margin-top: 40px;
 }
 .recently-added-title h2{
     margin-top: 10px;
@@ -164,36 +169,6 @@
 .arrow{
     width: 35px;
     height: 35px;
-}
-.continue-watching-section{
-    display: flex;
-    align-items: stretch;
-    margin-top: 40px;
-}
-.continue-watching-layout{
-    padding: 30px;
-    padding-top: 0;
-    border: 1px solid gray;
-    border-radius: 30px 0 0 30px;
-    background-color:#0a0a13;
-    box-sizing: border-box;
-    width: 950px;
-}
-.continue-watching-grid{
-    display: grid;
-    grid-template-columns: repeat(5, 150px);
-    gap: 35px;
-    width: fit-content;
-    box-sizing: border-box;
-}
-.continue-watching-card{
-    margin-right: 15px;
-    display: block;
-    width: 150px;
-    background-color: rgba(13, 12, 14, 0.6);
-    border-radius: 15px;
-    border: 1px solid gray;
-    transition: 0.3s;
 }
 .continue-watching-card img{
     width: 100%;
@@ -206,6 +181,7 @@
 .library-chart{
     border: solid;
     width: 140px;
+    min-width: 140px;
     height: 140px;
     border-radius: 50%;
     display: flex;
@@ -219,6 +195,7 @@
 .chart-center{
     border: solid;
     width: 110px;
+    min-width: 110px;
     height: 110px;
     border-radius: 50%;
     background-color: #050511;
@@ -231,24 +208,30 @@
     border-radius: 30px;
     padding: 25px;
     display: grid;
-    margin-bottom: 40px;
-    width: 1065px;
+    margin-bottom: 30px;
+    width: 73%;
     box-sizing: border-box;
     background-color:#0a0a13;
     margin-top: 40px;
 }
 .library-count{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     margin-left: 40px;
-    justify-items: center;
-    align-self: center;
+    justify-content: space-evenly;
 }
 .library-stats-overview{
     display: flex;
-    justify-content: center;
-    margin-right: 20px;
+    align-items: center;
+    justify-content: space-evenly;
+    flex: 1;
+    min-width: 0;
 }
 .library-stats-body{
     display: flex;
+    width: 100%;
+    align-items: center;
 }
 .stats-card{
     border: solid 1px gray;
@@ -269,15 +252,19 @@
 }
 .stats-stats{
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex: 1;
+    min-width: 0;
 }
-.display-percentage{
+.display-movie-percentage,
+.display-tv-percentage{
     display: flex;
     gap: 100px;
-    margin-top: -20px;
 }
 .movie-percentage{
     color:  #ae05fc;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 .tv-percentage{
     color:  #673aed;
@@ -285,13 +272,48 @@
 .mobile-view-all{
     display: none;
 }
+@media (max-width: 1449px){
+    .your-library{
+        width: 73%;
+        min-width: 380px;
+    }
+    .library-stats-overview{
+        display: grid;
+        width: 100%;
+        gap: 5px;
+    }
+    .stats-card{
+        flex: 1;
+        width: 150px;
+        min-width: 150px;
+    }
+    .stats-card p{
+        justify-self: center;
+    }
+    .stats-stats{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .display-movie-percentage,
+    .display-tv-percentage{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        gap: 30px;
+    }
+    .display-movie-percentage{
+        margin-top: 60px;
+    }
+    .library-count{
+        width: 90%;
+        margin-left: 0;
+    }
+}
 @media (max-width: 768px){
     .home-searchbar{
         width: 100%;
-    }
-    .recently-added-grid{
-        display: flex;
-        overflow-x: auto;
     }
     .recently-added-card{
         flex-shrink: 0;
@@ -318,25 +340,33 @@
     .mobile-view-all:hover {
     background-position: right;
     }
+    .recently-added-section,
+    .continue-watching-section{
+        width: 98%;
+    }
     .recently-added-layout,
     .continue-watching-layout {
         width: 95%;
         border-radius: 30px;
         min-width: 0;
     }
-
     .recently-added-grid,
     .continue-watching-grid {
-        display: flex;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 15px;
         padding-top: 10px;
+        padding-bottom: 10px;
         padding-left: 8px;
     }
-
+    .recently-added-card,
+    .continue-watching-card {
+        scroll-snap-align: start;
+    }
+    .recently-added-card img,
+    .continue-watching-card img {
+        width: 100%;
+        height: auto;
+    }
     .recently-added-card,
     .continue-watching-card,
     .mobile-view-all {
@@ -347,14 +377,14 @@
         width: 95%;
     }
     .library-stats-overview{
-        display: flex;
+        display: grid;
         width: 100%;
         gap: 5px;
     }
     .stats-card{
         flex: 1;
-        width: auto;
-        min-width: 0;
+        width: 150px;
+        min-width: 150px;
     }
     .stats-card p{
         justify-self: center;
@@ -365,10 +395,15 @@
         align-items: center;
         width: 100%;
     }
-    .display-percentage{
+    .display-movie-percentage,
+    .display-tv-percentage{
         display: flex;
         width: 100%;
         justify-content: center;
+        gap: 30px;
+    }
+    .display-movie-percentage{
+        margin-top: 60px;
     }
     .library-count{
         width: 90%;

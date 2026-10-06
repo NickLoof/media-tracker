@@ -1,5 +1,17 @@
 .browse-layout{
-    padding: 0 25px 50px 25px;
+    padding: 0 25px 30px 25px;
+}
+.browse-title-container{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    background-color: #1c1c29;
+    height: 85px;
+    padding: 15px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 .filter-group{
     display: flex;
@@ -202,7 +214,6 @@
     width: 500px;
     margin-bottom: 15px;
 }
-
 .genre-select{
     border-radius: 30px;
     background-color: #670296;

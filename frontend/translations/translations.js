@@ -53,7 +53,6 @@ export const translations = {
         selectedRating: "Selected Rating",
         fillAllFields: "Please fill out all fields!",
         noMediaMatches: "No media matches these filters.",
-        remove: "Remove",
         inLibrary: "In your library!",
 
         // General
@@ -73,7 +72,6 @@ export const translations = {
         recentlyAdded: "Recently Added",
         yourLibrary: "Your Library",
         viewLibrary: "View Library",
-        browseMedia: "Browse Media",
         menu: "MENU",
         totalMovies: "Total Movies",
         totalTvShows: "Total Tv Shows",
@@ -134,7 +132,6 @@ export const translations = {
         selectedRating: "Ausgewählte Bewertung",
         fillAllFields: "Bitte alle Felder ausfüllen!",
         noMediaMatches: "Keine Medien entsprechen diesen Filtern.",
-        remove: "Entfernen",
         inLibrary: "In deiner Bibliothek!",
 
         // General
@@ -144,8 +141,6 @@ export const translations = {
         english: "Englisch",
         german: "Deutsch",
         appTitle: "Medien-Tracker",
-        hours: "Stunden",
-        minutes: "Minuten",
 
         //Home
         homeTitle: "Startseite",
@@ -156,7 +151,6 @@ export const translations = {
         recentlyAdded: "Kürzlich hinzugefügt",
         yourLibrary: "Deine Bibliothek",
         viewLibrary: "Bibliothek ansehen",
-        browseMedia: "Medien durchsuchen",
         menu: "MENÜ",
         totalMovies: "Filme Gesamt",
         totalTvShows: "Serien Gesamt",

@@ -1,7 +1,7 @@
 import {CircleX, Star} from "lucide-react";
 import {useState, useEffect} from "react";
 import { useContext } from "react";
-import { LanguageContext } from "../context/languageContext";
+import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import "./MediaDetails.css";
 
@@ -9,7 +9,7 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
 
     const [movieDetails, setMovieDetails] = useState(null);
     const [trailerVideo, setTrailerVideo] = useState(null);
-    const {language, setLanguage} = useContext(LanguageContext);
+    const {language} = useContext(LanguageContext);
     const t = translations[language];
     const hours = Math.floor((movieDetails?.runtime || 0) / 60);
     const minutes = (movieDetails?.runtime || 0) % 60;
@@ -21,9 +21,6 @@ const MediaDetails = ({selectedMedia, type, onClose}) => {
         if(!selectedMedia){
             return;
         }
-        console.log("SELECTED MEDIA:", selectedMedia);
-        console.log("TYPE:", type);
-        console.log("TMDB ID:", tmdbId);
         fetch(`http://localhost:3000/media-details/${tmdbId}?type=${type}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {

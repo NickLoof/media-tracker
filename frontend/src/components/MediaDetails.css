@@ -41,6 +41,9 @@
     top: 0;
     z-index: 2;
 }
+.modal-details {
+        margin-inline: 20px;
+    }
 
 @media (max-width: 768px){
     .movie-popup{
@@ -65,9 +68,6 @@
         width: 90%;
         aspect-ratio: 16/9;
         height: auto;
-    }
-    .modal-details {
-        margin-inline: 20px;
     }
     .library-status{
         margin: 10px 20px;

@@ -1,5 +1,6 @@
 .library-layout{
     padding-left: 20px;
+    padding-bottom: 30px;
 }
 .library-card-info{
     padding-top: 0;
@@ -75,6 +76,18 @@
 .star:hover{
     color: rgb(255, 238, 1);
     scale: 1.04;
+}
+.library-title-container{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    background-color: #1c1c29;
+    height: 85px;
+    padding: 15px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 .remove-button{
     border: solid rgb(0, 0, 0);

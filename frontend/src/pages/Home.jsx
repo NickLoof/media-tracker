@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from "react";
-import { LanguageContext } from "../context/languageContext";
+import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import "./home.css"
 import {Search, ArrowRight} from "lucide-react"
@@ -7,7 +7,7 @@ import MediaDetails from "../components/MediaDetails";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const {language, setLanguage} = useContext(LanguageContext);
+    const {language} = useContext(LanguageContext);
     const t = translations[language];
     const [inputValue, setInputValue] = useState("");
     const [isSearching, setIsSearching] = useState(false);
@@ -27,7 +27,6 @@ const Home = () => {
             return;
         }
         if(inputValue === ""){
-            setSearchResults([]);
             return;
         }
         const timer = setTimeout(()=> {
@@ -39,7 +38,7 @@ const Home = () => {
             clearTimeout(timer);
         }
 
-    }, [inputValue], [isSearching], [language]);
+    }, [inputValue, isSearching, language]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/media`)
@@ -96,8 +95,12 @@ const Home = () => {
             <div className="search-container" >
                 <div className="home-search-wrapper" ref={searchAreaRef}>
                     <Search className="search-icon"/>
-                    <input value={inputValue} type="text" className="home-searchbar" placeholder={t.searchMedia} onChange={(event) => {setInputValue(event.target.value);
-                        setSelectedMedia(null); setIsSearching(true);}} onFocus={() => setIsSearching(true)}/>
+                    <input value={inputValue} type="text" className="home-searchbar" placeholder={t.searchMedia} onChange={(event) => { const value = event.target.value;
+                        setInputValue(event.target.value);
+                        setSelectedMedia(null); 
+                        setIsSearching(true);
+                        if(value === ""){setSearchResults([])};
+                        }} onFocus={() => setIsSearching(true)}/>
                     {isSearching && searchResults.length > 0 && (<div className="home-search-dropdown">
                         {searchResults.map((item) => (<div className="search-result" key={item.id} onClick={() => handleMediaClick(item)}>
                             {item.poster_path?(<img className="search-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>)
@@ -171,11 +174,11 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="library-count">
-                            <div className="display-percentage">
+                            <div className="display-movie-percentage">
                                 <p className="movie-percentage">{t.movies}</p>
                                 <p className="movie-percentage">{moviePercentage.toFixed(2)}%</p>
                             </div>
-                            <div className="display-percentage">
+                            <div className="display-tv-percentage">
                                 <p className="tv-percentage">{t.tvShows}</p>
                                 <p className="tv-percentage">{tvShowPrecentage.toFixed(2)}%</p>
                             </div>

@@ -2,7 +2,7 @@ import {Star, CircleX, Search} from "lucide-react"
 import { useState, useEffect, useRef, Fragment} from "react";
 import "./MediaForm.css"
 import { useContext } from "react";
-import { LanguageContext } from "../context/languageContext";
+import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 
 
@@ -23,7 +23,7 @@ const MediaForm = (props) => {
     const [movieGenreMap, setMovieGenreMap] = useState({});
     const [tvGenreMap, setTvGenreMap] = useState({});
     const genreOptions = Object.values(type === "Movie"?movieGenreMap:tvGenreMap);
-    const {language, setLanguage} = useContext(LanguageContext);
+    const {language} = useContext(LanguageContext);
     const t = translations[language];
 
     useEffect(() => {
@@ -99,7 +99,6 @@ const MediaForm = (props) => {
             return;
         }
         if(title === ""){
-            setSearchResults([]);
             return;
         }
         const timer = setTimeout(() => {
@@ -136,9 +135,15 @@ const MediaForm = (props) => {
                     <legend>{t.addMedia}</legend>
                         <div className="search-header">
                         <label htmlFor="title">{t.title}: </label>
-                        <div className="search-container" ref={searchRef}>
+                        <div className="media-form-search-container" ref={searchRef}>
                             <Search className="media-form-search-icon"/>
-                        <input className="media-form-searchbar" placeholder={t.enterTitle} value={title} onChange={(event) => {setTitle(event.target.value); setSelectedMedia(null); setIsSearching(true);}}
+                        <input className="media-form-searchbar" placeholder={t.enterTitle} value={title} onChange={(event) => {const value = event.target.value;
+                            setTitle(event.target.value); 
+                            setSelectedMedia(null); 
+                            setIsSearching(true);
+                            if(value === ""){
+                                setSearchResults([]);
+                            }}}
                         onFocus={() => setIsSearching(true)}/>
                         {isSearching && searchResults.length > 0 && (<div className="search-dropdown">
                         {searchResults.map((item) => (<div key={item.id} className="search-result" onClick={() => handleSelect(item)} >

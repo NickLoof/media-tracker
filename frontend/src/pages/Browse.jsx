@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import "./Browse.css";
 import { useContext } from "react";
-import { LanguageContext } from "../context/languageContext";
+import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
 import { Search } from "lucide-react";
@@ -17,7 +17,7 @@ const Browse = () =>{
     const [genreFilter, setGenreFilter] = useState("");
     const [movieClicked, setMovieClicked] = useState(null);
     const [inputValue, setInputValue] = useState("");
-    const {language, setLanguage} = useContext(LanguageContext);
+    const {language} = useContext(LanguageContext);
     const t = translations[language];
 
 
@@ -56,8 +56,11 @@ const Browse = () =>{
     
 
     return (
-        <div className="browse-layout">
+        <>
+        <div className="browse-title-container">
             <h1>{t.browseAllMedia}</h1>
+        </div>
+        <div className="browse-layout">
             <div className="browse-search-wrapper">
                 <Search className="browse-search-icon"/>
                 <input className="browse-searchbar" type="text" placeholder={t.searchPlaceholder} value={inputValue} onChange={(event) => setInputValue(event.target.value)}/>
@@ -99,6 +102,7 @@ const Browse = () =>{
                 <button className="next-button" onClick={() => setPage(page<totalPages?page +1:page)}>{t.next}</button>
             </div>
         </div>
+        </>
     );
 };
 
