@@ -2,6 +2,10 @@
 
 Media Tracker is a full-stack web application that allows users to browse movies and TV shows using data provided by TMDB and save them to a personal library. Users can keep track of what they want to watch, what they're currently watching, what they've completed, and even what they've dropped. The application also allows users to rate their saved media and manually add titles that aren't available through TMDB search.
 
+## Live Demo
+
+[View the live Media Tracker](https://media-tracker-production-d1df.up.railway.app/)
+
 ## Features
 
  ### Home Dashboard
