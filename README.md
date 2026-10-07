@@ -145,7 +145,7 @@ A TMDB API token is required to retrieve movie and Tv Show data.
 From the `backend` folder:
 
 ```bash
-node server.js
+npm start
 ```
 
 The backend will run on:
