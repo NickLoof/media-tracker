@@ -5,6 +5,7 @@ import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
 import { Search } from "lucide-react";
+import { API_URL } from "../../api.js";
 
 const Browse = () =>{
     const [page, setPage] = useState(1);
@@ -26,7 +27,7 @@ const Browse = () =>{
         ? `/browse-movies?title=${encodeURIComponent(inputValue)}&type=${typeFilter}&language=${language}`
         : `/browse-movies?page=${page}&type=${typeFilter}&category=${category}&genre=${genreFilter}&language=${language}`
         const timer = setTimeout(() =>{
-        fetch(`http://localhost:3000${url}`)
+        fetch(`${API_URL}${url}`)
         .then((response) => response.json())
         .then((data) => {
             setMovies(data.results);
@@ -40,7 +41,7 @@ const Browse = () =>{
 
     useEffect(() => {
 
-        fetch(`http://localhost:3000/genres?type=${typeFilter}&language=${language}`)
+        fetch(`${API_URL}/genres?type=${typeFilter}&language=${language}`)
         .then((response)=> response.json())
         .then((data) => {
             setGenres(data.genres)});

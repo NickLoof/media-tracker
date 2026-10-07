@@ -4,7 +4,7 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const db = new sqlite3.Database("media.db")
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -227,5 +227,5 @@ app.get("/search", (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log("Server is running!");
+    console.log(`Server running on port ${port}`);
 })

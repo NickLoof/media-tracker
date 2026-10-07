@@ -4,6 +4,7 @@ import "./MediaForm.css"
 import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
+import { API_URL } from "../../api.js";
 
 
 
@@ -27,7 +28,7 @@ const MediaForm = (props) => {
     const t = translations[language];
 
     useEffect(() => {
-        fetch("http://localhost:3000/genres?type=Movie")
+        fetch(`${API_URL}/genres?type=Movie`)
         .then((response) => 
             response.json())
         .then((data) => {
@@ -38,7 +39,7 @@ const MediaForm = (props) => {
         },{});
         setMovieGenreMap(fetchedGenreMap);
     })
-        fetch(`http://localhost:3000/genres?type=${"Tv Show"}`)
+        fetch(`${API_URL}/genres?type=${"Tv Show"}`)
         .then((response) => 
             response.json())
         .then((data) => {
@@ -80,7 +81,7 @@ const MediaForm = (props) => {
 
             return;
         }
-        fetch("http://localhost:3000/media", {method: "POST", headers: {"Content-Type": "application/json"}, 
+        fetch(`${API_URL}/media`, {method: "POST", headers: {"Content-Type": "application/json"}, 
             body: JSON.stringify({title, type, genre, status, rating, poster_path: selectedMedia?.poster_path || null, description: selectedMedia?.overview || "", 
                 release_date: selectedMedia?.release_date || selectedMedia?.first_air_date || "", tmdb_id: selectedMedia?.id})})
         .then((response) => {
@@ -102,7 +103,7 @@ const MediaForm = (props) => {
             return;
         }
         const timer = setTimeout(() => {
-            fetch(`http://localhost:3000/search?title=${encodeURIComponent(title)}`)
+            fetch(`${API_URL}/search?title=${encodeURIComponent(title)}`)
             .then((response) => {
                 return response.json();
             })

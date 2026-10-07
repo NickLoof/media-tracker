@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import "./MediaDetails.css";
+import { API_URL } from "../../api.js";
 
 const MediaDetails = ({selectedMedia, type, onClose, fromLibrary = false}) => {
 
@@ -16,22 +17,24 @@ const MediaDetails = ({selectedMedia, type, onClose, fromLibrary = false}) => {
     const [libraryMessage, setLibraryMessage] = useState("");
     const tmdbId = selectedMedia.tmdb_id || selectedMedia.id;
     const isInLibrary = fromLibrary || selectedMedia.tmdb_id != null;
+    const isManualMedia = fromLibrary && selectedMedia.tmdb_id == null;
+    
 
     useEffect(() => {
         if(!selectedMedia){
             return;
         }
-        if (!selectedMedia.tmdb_id) {
+        if (isManualMedia) {
             setMovieDetails(selectedMedia);
             setTrailerVideo(null);
             return;
         }
-        fetch(`http://localhost:3000/media-details/${tmdbId}?type=${type}&language=${language}`)
+        fetch(`${API_URL}/media-details/${tmdbId}?type=${type}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
             setMovieDetails(data);
         })
-        fetch(`http://localhost:3000/media-videos/${tmdbId}?type=${type}`)
+        fetch(`${API_URL}/media-videos/${tmdbId}?type=${type}`)
         .then((response) => response.json())
         .then((data) => {
         const germanVideos = data.results.filter((video) => video.iso_639_1 === "de");
@@ -61,7 +64,7 @@ const MediaDetails = ({selectedMedia, type, onClose, fromLibrary = false}) => {
             release_date: selectedMedia.release_date || selectedMedia.first_air_date,
             tmdb_id: selectedMedia.id
         }
-        fetch("http://localhost:3000/media", {method: "POST", headers:{"Content-Type": "application/json"}, body: JSON.stringify(libraryFormat)})
+        fetch(`${API_URL}/media`, {method: "POST", headers:{"Content-Type": "application/json"}, body: JSON.stringify(libraryFormat)})
         .then((response) =>{ if(response.status === 409) {setLibraryMessage(t.alreadyInLibrary); 
             return;
         }if(response.status === 201) {setLibraryMessage(t.addedToLibrary)}

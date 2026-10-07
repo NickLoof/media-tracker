@@ -314,7 +314,8 @@
 }
 @media (max-width: 768px){
     .home-searchbar{
-        width: 100%;
+        width: calc(100% - 70px);
+        margin-right: auto;
     }
     .recently-added-card{
         flex-shrink: 0;
@@ -376,11 +377,15 @@
     }
     .your-library{
         width: 95%;
+        min-width: 0;
     }
     .library-stats-overview{
-        display: grid;
-        width: 100%;
-        gap: 5px;
+        width: 95%;
+    }
+    .library-stats-body{
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;    
     }
     .stats-card{
         flex: 1;
@@ -391,11 +396,9 @@
         justify-self: center;
     }
     .stats-stats{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         width: 100%;
     }
+    
     .display-movie-percentage,
     .display-tv-percentage{
         display: flex;
@@ -404,7 +407,7 @@
         gap: 30px;
     }
     .display-movie-percentage{
-        margin-top: 60px;
+        margin-top: 10px;
     }
     .library-count{
         width: 90%;
@@ -424,9 +427,6 @@
         margin-bottom: 5px;
     }
     .home-search-wrapper{
-        width: 100%;
-    }
-    .home-searchbar{
         width: 100%;
     }
     .home-search-dropdown{

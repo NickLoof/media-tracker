@@ -7,6 +7,7 @@ import { LanguageContext } from "../context/languageContext.js";
 import { translations } from "../../translations/translations";
 import MediaDetails from "../components/MediaDetails";
 import { useSearchParams } from "react-router-dom";
+import { API_URL } from "../../api.js";
 
 const Library = () => {
     const starCount = [1, 2, 3, 4, 5];
@@ -30,7 +31,7 @@ const Library = () => {
         setMedia([...media, newMedia]);
     }
     const deleteMedia = (id) => {
-        fetch(`http://localhost:3000/media/${id}`,{
+        fetch(`${API_URL}/media/${id}`,{
             method: "DELETE"
         }).then(() => {
             const updatedMedia = media.filter((item) => item.id !== id)
@@ -46,7 +47,7 @@ const Library = () => {
         }
         });
         setMedia(updatedMedia);
-        fetch(`http://localhost:3000/media/${id}`, {
+        fetch(`${API_URL}/media/${id}`, {
             method: "PATCH", headers:{"Content-Type": "application/json"}, body: JSON.stringify({status: newStatus})
         });
     };
@@ -60,7 +61,7 @@ const Library = () => {
         }
         });
         setMedia(updatedMedia);
-        fetch(`http://localhost:3000/media/${id}`, {
+        fetch(`${API_URL}/media/${id}`, {
             method: "PATCH", headers:{"Content-Type": "application/json"}, body: JSON.stringify({rating: newRating})
         });
     };
@@ -71,7 +72,7 @@ const Library = () => {
 
 
   useEffect(() => {
-  fetch("http://localhost:3000/media")
+  fetch(`${API_URL}/media`)
   .then((response) => {
     return response.json();
   })

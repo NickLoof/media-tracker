@@ -5,6 +5,7 @@ import "./home.css"
 import {Search, ArrowRight} from "lucide-react"
 import MediaDetails from "../components/MediaDetails";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../api.js";
 
 const Home = () => {
     const {language} = useContext(LanguageContext);
@@ -30,7 +31,7 @@ const Home = () => {
             return;
         }
         const timer = setTimeout(()=> {
-        fetch(`http://localhost:3000/search?title=${encodeURIComponent(inputValue)}&language=${language}`)
+        fetch(`${API_URL}/search?title=${encodeURIComponent(inputValue)}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {setSearchResults(data)});
         }, 200);
@@ -41,7 +42,7 @@ const Home = () => {
     }, [inputValue, isSearching, language]);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/media`)
+        fetch(`${API_URL}/media`)
         .then((response) => {return response.json()})
         .then((data) => {
             const recent = [...data].sort((a, b) => b.id - a.id).slice(0, 5);
