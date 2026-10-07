@@ -3,7 +3,10 @@ const sqlite3 = require("sqlite3");
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
-const db = new sqlite3.Database("media.db")
+const dbPath = process.env.RAILWAY_VOLUME_MOUNT_PATH
+    ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/media.db`
+    : "media.db";
+const db = new sqlite3.Database(dbPath);
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
