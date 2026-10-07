@@ -92,6 +92,9 @@ button{
 }
 .mobile-menu-button{
     display: none;
+    background-color: #5f028a;
+    border: 1px solid gray;
+    border-radius: 10px;
 }
 .tmdb-attribution{
     margin: 20px;
@@ -116,8 +119,8 @@ button{
         display: block;
         cursor: pointer;
         position: fixed;
-        top: 15px;
-        right: 15px;
+        top: 25px;
+        right: 20px;
         z-index: 100;
     }
     .side-menu{

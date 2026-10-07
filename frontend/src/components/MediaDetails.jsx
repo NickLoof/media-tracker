@@ -78,7 +78,7 @@ const MediaDetails = ({selectedMedia, type, onClose, fromLibrary = false}) => {
                         <div className="movie-backdrop" style={{backgroundImage: movieDetails?.backdrop_path
                         ? `url(https://image.tmdb.org/t/p/w780${movieDetails.backdrop_path})`
                         : "none"}}>
-                        <button className="close-button" onClick={onClose}><CircleX/></button>
+                        <button className="modal-close-button" onClick={onClose}><CircleX/></button>
                         </div>
                         <div className="media-details-body">
                         <div className="poster">
