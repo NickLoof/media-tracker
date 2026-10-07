@@ -68,8 +68,10 @@ app.get("/media", (req, res) => {
 
 app.get("/genres", (req, res) => {
     const type = req.query.type;
+    const language = req.query.language;
+    const tmdbLanguage = language === "de"?"de-DE":"en-US";
     const mediaType = (type === "Movie")?"movie":"tv"
-    const url = `https://api.themoviedb.org/3/genre/${mediaType}/list`;
+    const url = `https://api.themoviedb.org/3/genre/${mediaType}/list?language=${tmdbLanguage}`;
     fetch(url, {
         headers: {
             Authorization: `Bearer ${process.env.TMDB_TOKEN}`

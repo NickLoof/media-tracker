@@ -44,6 +44,15 @@
 .modal-details {
         margin-inline: 20px;
     }
+.no-poster {
+    width: 200px;
+    aspect-ratio: 2 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
 
 @media (max-width: 768px){
     .movie-popup{

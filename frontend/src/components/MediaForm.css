@@ -112,10 +112,15 @@
     background-color: #493c5e;
     cursor: pointer;
     border: 2px solid rgb(3, 3, 3);
+    transition: 0.2s;
 }
 .media-form-genre-chip:hover{
     background-color: #a53aed;
     border: 2px solid gray;
+}
+.media-form-genre-checkbox:checked + .media-form-genre-chip {
+    background-color: #ae05fc;
+    border-color: gray;
 }
 .media-form-filter-select{
     display: grid;

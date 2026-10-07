@@ -101,16 +101,16 @@ const Library = () => {
             </div>
             {showMedia && <MediaForm hideMediaForm={hideMediaForm} addMedia={addMedia}/>}
             {filteredMedia.length === 0 && <p>{t.noMediaMatches}</p>}
-            {selectedMedia && <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.type} onClose={() => setSelectedMedia(null)}/>}
+            {selectedMedia && <MediaDetails selectedMedia={selectedMedia} type={selectedMedia.type} onClose={() => setSelectedMedia(null)} fromLibrary={true}/>}
             <div className="library-grid">
             {filteredMedia.map((item) => {
             return(
-            <div className="library-card" key={item.id}>    
+            <div onClick={() => setSelectedMedia(item)} className="library-card" key={item.id}>    
             <div className="library-card-body">
-                <img onClick={() => setSelectedMedia(item)} className="library-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
+                <img className="library-poster" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title || item.name}/>
                 <div className="library-card-info">
                     <h2>{item.title}{" "}({item.release_date?.slice(0, 4)})</h2>
-                    <p><select className="status-select" value={item.status} onChange={(event) => updateStatus(item.id, event.target.value)}>
+                    <p><select className="status-select" value={item.status} onClick={(event) => event.stopPropagation()} onChange={(event) => updateStatus(item.id, event.target.value)}>
                         <option value="Want to Watch">{t.wantToWatch}</option>
                         <option value="Watching">{t.watching}</option>
                         <option value="Completed">{t.completed}</option>
@@ -120,11 +120,11 @@ const Library = () => {
                     <div className="library-card-bottom">
                         <div className="star-rating"> 
                             {starCount.map((star) => (
-                            <Star className="star" key={star} onClick={() => updateRating(item.id, star)} fill={item.rating >= star ? "currentColor" : "none"} />
+                            <Star className="star" key={star} onClick={(event) => {event.stopPropagation(); updateRating(item.id, star);}} fill={item.rating >= star ? "currentColor" : "none"} />
                              
                             ))}
                         </div>
-                        <button className="remove-button" onClick={() => deleteMedia(item.id)}>{t.remove}</button>
+                        <button className="remove-button" onClick={(event) => {event.stopPropagation(); deleteMedia(item.id)}}>{t.remove}</button>
                     </div>
                 </div>
             </div>

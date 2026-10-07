@@ -93,6 +93,7 @@
     min-width: 0;
     overflow-x: auto;
     padding-bottom: 15px;
+    padding-top: 15px;
 }
 .recently-added-layout,
 .continue-watching-layout{

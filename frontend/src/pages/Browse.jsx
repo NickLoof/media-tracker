@@ -40,11 +40,11 @@ const Browse = () =>{
 
     useEffect(() => {
 
-        fetch(`http://localhost:3000/genres?type=${typeFilter}`)
+        fetch(`http://localhost:3000/genres?type=${typeFilter}&language=${language}`)
         .then((response)=> response.json())
         .then((data) => {
             setGenres(data.genres)});
-    },[typeFilter])
+    },[typeFilter, language])
 
     useEffect(() => {
         window.scrollTo({
